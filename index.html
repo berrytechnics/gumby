@@ -19,12 +19,15 @@
   }
 
   .sign {
-    width: 900px;
+    width: 800px;
+    height: 1200px; /* exact 2:3 ratio for 24x36 poster */
     background: #0d0d0d;
     border: 3px solid #8B6914;
     position: relative;
     overflow: hidden;
     box-shadow: 0 0 60px rgba(139, 105, 20, 0.3), 0 0 120px rgba(0,0,0,0.8);
+    display: flex;
+    flex-direction: column;
   }
 
   /* Corner ornaments */
@@ -128,10 +131,12 @@
 
   /* Content area */
   .content {
-    padding: 30px 50px;
+    padding: 24px 50px;
     display: grid;
     grid-template-columns: 1fr 1px 1fr;
     gap: 0;
+    flex: 1;
+    overflow: hidden;
   }
 
   .col-divider {
