@@ -1,1458 +1,1959 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Classic Car Poster Builder</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<style>
-/* ═══════════════════════════════════════
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classic Car Poster Builder</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&family=Barlow:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        /* ═══════════════════════════════════════
    APP SHELL
 ═══════════════════════════════════════ */
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-:root {
-  --app-bg: #111114;
-  --panel-bg: #1A1A1F;
-  --panel-border: #2A2A32;
-  --input-bg: #111114;
-  --input-border: #2A2A32;
-  --input-focus: #C9962A;
-  --text-primary: #E8E8E8;
-  --text-secondary: #888;
-  --tab-active: #C9962A;
-  --accent: #C9962A;
-  --btn-primary: #C9962A;
-  --btn-primary-hover: #E5B040;
-  --btn-secondary: #2A2A32;
-  --scrollbar: #2A2A32;
-}
+        :root {
+            --app-bg: #111114;
+            --panel-bg: #1A1A1F;
+            --panel-border: #2A2A32;
+            --input-bg: #111114;
+            --input-border: #2A2A32;
+            --input-focus: #C9962A;
+            --text-primary: #E8E8E8;
+            --text-secondary: #888;
+            --tab-active: #C9962A;
+            --accent: #C9962A;
+            --btn-primary: #C9962A;
+            --btn-primary-hover: #E5B040;
+            --btn-secondary: #2A2A32;
+            --scrollbar: #2A2A32;
+            --editor-width: 430px;
+        }
 
-html, body {
-  height: 100%;
-  background: var(--app-bg);
-  color: var(--text-primary);
-  font-family: 'Barlow', sans-serif;
-  overflow: hidden;
-}
+        html,
+        body {
+            height: 100%;
+            background: var(--app-bg);
+            color: var(--text-primary);
+            font-family: 'Barlow', sans-serif;
+            overflow: hidden;
+        }
 
-.app {
-  display: grid;
-  grid-template-columns: 380px 1fr;
-  grid-template-rows: 56px 1fr;
-  height: 100vh;
-}
+        .app {
+            display: grid;
+            grid-template-columns: var(--editor-width) 8px 1fr;
+            grid-template-rows: 56px 1fr;
+            height: 100vh;
+        }
 
-/* ═══════════════════════════════════════
+        /* ═══════════════════════════════════════
    TOP BAR
 ═══════════════════════════════════════ */
-.topbar {
-  grid-column: 1 / -1;
-  background: #0D0D10;
-  border-bottom: 1px solid var(--panel-border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-}
-.topbar-brand {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 22px;
-  letter-spacing: 4px;
-  color: var(--accent);
-}
-.topbar-brand span { color: #555; font-size: 14px; letter-spacing: 2px; margin-left: 12px; font-family: 'Barlow', sans-serif; }
-.topbar-actions { display: flex; gap: 10px; }
+        .topbar {
+            grid-column: 1 / -1;
+            background: #0D0D10;
+            border-bottom: 1px solid var(--panel-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+        }
 
-.btn {
-  font-family: 'Oswald', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 18px;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.btn-primary { background: var(--btn-primary); color: #000; }
-.btn-primary:hover { background: var(--btn-primary-hover); transform: translateY(-1px); }
-.btn-secondary { background: var(--btn-secondary); color: var(--text-primary); border: 1px solid var(--panel-border); }
-.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+        .topbar-brand {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px;
+            letter-spacing: 4px;
+            color: var(--accent);
+        }
 
-/* ═══════════════════════════════════════
+        .topbar-brand span {
+            color: #555;
+            font-size: 14px;
+            letter-spacing: 2px;
+            margin-left: 12px;
+            font-family: 'Barlow', sans-serif;
+        }
+
+        .topbar-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            font-family: 'Oswald', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--btn-primary);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background: var(--btn-primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--btn-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--panel-border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* ═══════════════════════════════════════
    LEFT PANEL — EDITOR
 ═══════════════════════════════════════ */
-.editor-panel {
-  background: var(--panel-bg);
-  border-right: 1px solid var(--panel-border);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
+        .editor-panel {
+            background: var(--panel-bg);
+            border-right: 1px solid var(--panel-border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            grid-column: 1;
+            grid-row: 2;
+        }
 
-.tabs {
-  display: flex;
-  border-bottom: 1px solid var(--panel-border);
-  flex-shrink: 0;
-}
-.tab {
-  flex: 1;
-  padding: 12px 6px;
-  font-family: 'Oswald', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--text-secondary);
-  cursor: pointer;
-  border: none;
-  background: none;
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s;
-  text-align: center;
-}
-.tab:hover { color: var(--text-primary); }
-.tab.active { color: var(--tab-active); border-bottom-color: var(--tab-active); }
+        .panel-resizer {
+            grid-column: 2;
+            grid-row: 2;
+            background: #101014;
+            border-left: 1px solid #22222A;
+            border-right: 1px solid #22222A;
+            cursor: col-resize;
+            position: relative;
+            user-select: none;
+        }
 
-.tab-content { display: none; flex: 1; overflow-y: auto; padding: 20px; }
-.tab-content.active { display: block; }
-.tab-content::-webkit-scrollbar { width: 4px; }
-.tab-content::-webkit-scrollbar-track { background: transparent; }
-.tab-content::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: 2px; }
+        .panel-resizer::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 60px;
+            transform: translate(-50%, -50%);
+            background: #44444D;
+            border-radius: 2px;
+            opacity: 0.7;
+        }
 
-/* Form elements */
-.field-group { margin-bottom: 18px; }
-.field-group label {
-  display: block;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--text-secondary);
-  margin-bottom: 6px;
-}
-.field-group input[type="text"],
-.field-group textarea {
-  width: 100%;
-  background: var(--input-bg);
-  border: 1px solid var(--input-border);
-  border-radius: 4px;
-  color: var(--text-primary);
-  font-family: 'Barlow', sans-serif;
-  font-size: 14px;
-  padding: 9px 12px;
-  transition: border-color 0.2s;
-  resize: vertical;
-}
-.field-group input[type="text"]:focus,
-.field-group textarea:focus {
-  outline: none;
-  border-color: var(--input-focus);
-}
-.field-group textarea { min-height: 80px; line-height: 1.5; }
+        .panel-resizer:hover::before,
+        .panel-resizer.dragging::before {
+            background: var(--accent);
+            opacity: 1;
+        }
 
-.section-label {
-  font-family: 'Oswald', sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 14px;
-  margin-top: 6px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid var(--panel-border);
-}
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--panel-border);
+            flex-shrink: 0;
+        }
 
-.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .tab {
+            flex: 1;
+            padding: 12px 6px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border: none;
+            background: none;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            text-align: center;
+        }
 
-/* Spec rows editor */
-.spec-editor-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 28px;
-  gap: 6px;
-  margin-bottom: 6px;
-  align-items: center;
-}
-.spec-editor-row input { margin: 0; }
-.remove-spec-btn {
-  width: 28px; height: 28px;
-  background: #2A1A1A;
-  border: 1px solid #4A2A2A;
-  border-radius: 4px;
-  color: #FF6B6B;
-  cursor: pointer;
-  font-size: 14px;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s;
-  flex-shrink: 0;
-}
-.remove-spec-btn:hover { background: #3A1A1A; }
-.add-spec-btn {
-  width: 100%;
-  background: #1A2A1A;
-  border: 1px dashed #2A4A2A;
-  border-radius: 4px;
-  color: #6BBF6B;
-  cursor: pointer;
-  font-family: 'Oswald', sans-serif;
-  font-size: 11px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  padding: 8px;
-  margin-top: 6px;
-  transition: all 0.2s;
-}
-.add-spec-btn:hover { background: #1E321E; border-color: #3A6A3A; }
+        .tab:hover {
+            color: var(--text-primary);
+        }
 
-/* Color themes */
-.theme-presets {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-bottom: 20px;
-}
-.theme-preset {
-  border: 2px solid transparent;
-  border-radius: 8px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.theme-preset:hover { transform: scale(1.03); }
-.theme-preset.selected { border-color: var(--accent); }
-.theme-preview {
-  height: 50px;
-  display: flex;
-  flex-direction: column;
-}
-.theme-preview-header { flex: 2; }
-.theme-preview-body { flex: 1; }
-.theme-preset-name {
-  font-family: 'Oswald', sans-serif;
-  font-size: 10px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--text-secondary);
-  text-align: center;
-  padding: 4px 0;
-  background: var(--input-bg);
-}
+        .tab.active {
+            color: var(--tab-active);
+            border-bottom-color: var(--tab-active);
+        }
 
-.color-pickers {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-.color-field { }
-.color-field label {
-  display: block;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--text-secondary);
-  margin-bottom: 6px;
-}
-.color-input-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--input-bg);
-  border: 1px solid var(--input-border);
-  border-radius: 4px;
-  padding: 6px 10px;
-  transition: border-color 0.2s;
-}
-.color-input-row:focus-within { border-color: var(--accent); }
-.color-input-row input[type="color"] {
-  width: 24px; height: 24px;
-  border: none; background: none; cursor: pointer; padding: 0;
-  border-radius: 3px;
-}
-.color-input-row input[type="text"] {
-  flex: 1; background: none; border: none;
-  color: var(--text-primary);
-  font-family: 'Barlow', sans-serif;
-  font-size: 13px;
-  padding: 0;
-  text-transform: uppercase;
-}
-.color-input-row input[type="text"]:focus { outline: none; }
+        .tab-content {
+            display: none;
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
 
-/* Timeline editor */
-.timeline-editor-row {
-  display: grid;
-  grid-template-columns: 70px 1fr 28px;
-  gap: 6px;
-  margin-bottom: 6px;
-  align-items: center;
-}
+        .tab-content.active {
+            display: block;
+        }
 
-/* ═══════════════════════════════════════
+        .tab-content::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .tab-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .tab-content::-webkit-scrollbar-thumb {
+            background: var(--scrollbar);
+            border-radius: 2px;
+        }
+
+        /* Form elements */
+        .field-group {
+            margin-bottom: 18px;
+        }
+
+        .field-group label {
+            display: block;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .field-group input[type="text"],
+        .field-group textarea {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 4px;
+            color: var(--text-primary);
+            font-family: 'Barlow', sans-serif;
+            font-size: 14px;
+            padding: 9px 12px;
+            transition: border-color 0.2s;
+            resize: vertical;
+        }
+
+        .field-group input[type="text"]:focus,
+        .field-group textarea:focus {
+            outline: none;
+            border-color: var(--input-focus);
+        }
+
+        .field-group textarea {
+            min-height: 80px;
+            line-height: 1.5;
+        }
+
+        .section-label {
+            font-family: 'Oswald', sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 14px;
+            margin-top: 6px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--panel-border);
+        }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        /* Spec rows editor */
+        .spec-editor-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 52px 28px 28px 28px;
+            gap: 6px;
+            margin-bottom: 6px;
+            align-items: center;
+        }
+
+        .spec-editor-row input {
+            margin: 0;
+        }
+
+        .remove-spec-btn {
+            width: 28px;
+            height: 28px;
+            background: #2A1A1A;
+            border: 1px solid #4A2A2A;
+            border-radius: 4px;
+            color: #FF6B6B;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .remove-spec-btn:hover {
+            background: #3A1A1A;
+        }
+
+        .move-spec-btn {
+            width: 28px;
+            height: 28px;
+            background: #1A1A28;
+            border: 1px solid #2F2F4A;
+            border-radius: 4px;
+            color: #AAB2FF;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            font-family: 'Oswald', sans-serif;
+        }
+
+        .move-spec-btn:hover {
+            background: #222238;
+            border-color: #4D4D7A;
+        }
+
+        .highlight-spec-btn {
+            height: 28px;
+            min-width: 52px;
+            background: #1F2418;
+            border: 1px solid #3A4B2A;
+            border-radius: 4px;
+            color: #8FA66B;
+            cursor: pointer;
+            font-size: 10px;
+            font-family: 'Oswald', sans-serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            padding: 0 6px;
+            flex-shrink: 0;
+        }
+
+        .highlight-spec-btn:hover {
+            background: #27301E;
+            border-color: #4D6538;
+        }
+
+        .highlight-spec-btn.active {
+            background: #2D2A14;
+            border-color: #8A7633;
+            color: #E7CB74;
+        }
+
+        .add-spec-btn {
+            width: 100%;
+            background: #1A2A1A;
+            border: 1px dashed #2A4A2A;
+            border-radius: 4px;
+            color: #6BBF6B;
+            cursor: pointer;
+            font-family: 'Oswald', sans-serif;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 8px;
+            margin-top: 6px;
+            transition: all 0.2s;
+        }
+
+        .add-spec-btn:hover {
+            background: #1E321E;
+            border-color: #3A6A3A;
+        }
+
+        /* Color themes */
+        .theme-presets {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .theme-preset {
+            border: 2px solid transparent;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .theme-preset:hover {
+            transform: scale(1.03);
+        }
+
+        .theme-preset.selected {
+            border-color: var(--accent);
+        }
+
+        .theme-preview {
+            height: 50px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .theme-preview-header {
+            flex: 2;
+        }
+
+        .theme-preview-body {
+            flex: 1;
+        }
+
+        .theme-preset-name {
+            font-family: 'Oswald', sans-serif;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 4px 0;
+            background: var(--input-bg);
+        }
+
+        .color-pickers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .color-field label {
+            display: block;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .color-input-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 4px;
+            padding: 6px 10px;
+            transition: border-color 0.2s;
+        }
+
+        .color-input-row:focus-within {
+            border-color: var(--accent);
+        }
+
+        .color-input-row input[type="color"] {
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            padding: 0;
+            border-radius: 3px;
+        }
+
+        .color-input-row input[type="text"] {
+            flex: 1;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-family: 'Barlow', sans-serif;
+            font-size: 13px;
+            padding: 0;
+            text-transform: uppercase;
+        }
+
+        .color-input-row input[type="text"]:focus {
+            outline: none;
+        }
+
+        /* Timeline editor */
+        .timeline-editor-row {
+            display: grid;
+            grid-template-columns: 70px 1fr 28px;
+            gap: 6px;
+            margin-bottom: 6px;
+            align-items: center;
+        }
+
+        /* ═══════════════════════════════════════
    RIGHT PANEL — PREVIEW
 ═══════════════════════════════════════ */
-.preview-panel {
-  overflow: auto;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 30px;
-  background:
-    radial-gradient(ellipse at 20% 50%, rgba(201,150,42,0.04) 0%, transparent 60%),
-    var(--app-bg);
-}
-.preview-panel::-webkit-scrollbar { width: 6px; height: 6px; }
-.preview-panel::-webkit-scrollbar-track { background: transparent; }
-.preview-panel::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: 3px; }
+        .preview-panel {
+            overflow: auto;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 30px;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(201, 150, 42, 0.04) 0%, transparent 60%),
+                var(--app-bg);
+            grid-column: 3;
+            grid-row: 2;
+        }
 
-/* Scale wrapper */
-.poster-scale-wrapper {
-  transform-origin: top center;
-}
+        .preview-panel::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
 
-/* ═══════════════════════════════════════
+        .preview-panel::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .preview-panel::-webkit-scrollbar-thumb {
+            background: var(--scrollbar);
+            border-radius: 3px;
+        }
+
+        /* Scale wrapper */
+        .poster-scale-wrapper {
+            display: inline-block;
+        }
+
+        /* ═══════════════════════════════════════
    THE POSTER  (all sizes via --ps scale factor)
    Baseline: 800 x 1200  →  --ps: 1
    Every font/padding multiplied by --ps
 ═══════════════════════════════════════ */
-#poster {
-  --ps: 1; /* set by JS: posterHeight / 1200 */
-  width: 800px;
-  /* height set by JS */
-  background: var(--p-sign-bg, #0d0d0d);
-  border: calc(3px * var(--ps)) solid var(--p-border, #8B6914);
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 0 60px rgba(139,105,20,0.2), 0 20px 60px rgba(0,0,0,0.6);
-  display: flex;
-  flex-direction: column;
-  font-family: 'Crimson Pro', serif;
-}
+        #poster {
+            --ps: 1;
+            /* set by JS: posterHeight / 1200 */
+            width: 800px;
+            /* height set by JS */
+            background: var(--p-sign-bg, #0d0d0d);
+            border: calc(3px * var(--ps)) solid var(--p-border, #8B6914);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 60px rgba(139, 105, 20, 0.2), 0 20px 60px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            font-family: 'Crimson Pro', serif;
+        }
 
-#poster::before, #poster::after {
-  content: '';
-  position: absolute;
-  width: calc(50px * var(--ps)); height: calc(50px * var(--ps));
-  border-color: var(--p-corner, #C9962A);
-  border-style: solid;
-  z-index: 10;
-}
-#poster::before { top: calc(8px * var(--ps)); left: calc(8px * var(--ps)); border-width: 2px 0 0 2px; }
-#poster::after  { bottom: calc(8px * var(--ps)); right: calc(8px * var(--ps)); border-width: 0 2px 2px 0; }
-.p-corner-br {
-  position: absolute; top: calc(8px * var(--ps)); right: calc(8px * var(--ps));
-  width: calc(50px * var(--ps)); height: calc(50px * var(--ps));
-  border-top: 2px solid var(--p-corner, #C9962A); border-right: 2px solid var(--p-corner, #C9962A); z-index: 10;
-}
-.p-corner-tl {
-  position: absolute; bottom: calc(8px * var(--ps)); left: calc(8px * var(--ps));
-  width: calc(50px * var(--ps)); height: calc(50px * var(--ps));
-  border-bottom: 2px solid var(--p-corner, #C9962A); border-left: 2px solid var(--p-corner, #C9962A); z-index: 10;
-}
+        #poster::before,
+        #poster::after {
+            content: '';
+            position: absolute;
+            width: calc(50px * var(--ps));
+            height: calc(50px * var(--ps));
+            border-color: var(--p-corner, #C9962A);
+            border-style: solid;
+            z-index: 10;
+        }
 
-.p-texture {
-  position: absolute; inset: 0;
-  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.008) 3px, rgba(255,255,255,0.008) 6px);
-  pointer-events: none;
-}
+        #poster::before {
+            top: calc(8px * var(--ps));
+            left: calc(8px * var(--ps));
+            border-width: 2px 0 0 2px;
+        }
 
-/* Poster Header */
-.p-header {
-  background: linear-gradient(135deg, var(--p-header1, #1C1C1C) 0%, var(--p-header2, #2A2A2A) 50%, var(--p-header1, #1C1C1C) 100%);
-  border-bottom: calc(3px * var(--ps)) solid var(--p-border, #8B6914);
-  padding: calc(16px * var(--ps)) calc(50px * var(--ps)) calc(12px * var(--ps));
-  text-align: center;
-  flex-shrink: 0;
-}
-.p-year-badge {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: calc(14px * var(--ps));
-  letter-spacing: calc(7px * var(--ps));
-  color: var(--p-accent, #C9962A);
-  margin-bottom: calc(4px * var(--ps));
-}
-.p-main-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: calc(70px * var(--ps));
-  line-height: 0.9;
-  color: #FFF;
-  letter-spacing: calc(4px * var(--ps));
-  text-shadow: calc(3px * var(--ps)) calc(3px * var(--ps)) 0px var(--p-border, #8B6914), calc(4px * var(--ps)) calc(4px * var(--ps)) calc(16px * var(--ps)) rgba(0,0,0,0.4);
-}
-.p-nickname {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: calc(22px * var(--ps));
-  letter-spacing: calc(10px * var(--ps));
-  color: var(--p-accent, #C9962A);
-  margin-top: calc(2px * var(--ps));
-}
-.p-subtitle {
-  font-family: 'Oswald', sans-serif;
-  font-size: calc(14px * var(--ps));
-  font-weight: 400;
-  color: var(--p-accent, #C9962A);
-  letter-spacing: calc(5px * var(--ps));
-  margin-top: calc(4px * var(--ps));
-}
+        #poster::after {
+            bottom: calc(8px * var(--ps));
+            right: calc(8px * var(--ps));
+            border-width: 0 2px 2px 0;
+        }
 
-/* Origin Banner */
-.p-origin {
-  background: linear-gradient(90deg, var(--p-banner1, #8B6914), var(--p-banner2, #C9962A), var(--p-banner1, #8B6914));
-  padding: calc(8px * var(--ps)) calc(50px * var(--ps));
-  text-align: center;
-  border-bottom: calc(2px * var(--ps)) solid var(--p-border, #8B6914);
-  flex-shrink: 0;
-}
-.p-origin p {
-  font-family: 'Oswald', sans-serif;
-  font-size: calc(13px * var(--ps));
-  font-weight: 600;
-  letter-spacing: calc(3px * var(--ps));
-  color: var(--p-banner-text, #0d0d0d);
-  text-transform: uppercase;
-}
+        .p-corner-br {
+            position: absolute;
+            top: calc(8px * var(--ps));
+            right: calc(8px * var(--ps));
+            width: calc(50px * var(--ps));
+            height: calc(50px * var(--ps));
+            border-top: 2px solid var(--p-corner, #C9962A);
+            border-right: 2px solid var(--p-corner, #C9962A);
+            z-index: 10;
+        }
 
-/* Content Grid */
-.p-content {
-  padding: calc(14px * var(--ps)) calc(44px * var(--ps));
-  display: grid;
-  grid-template-columns: 1fr 1px 1fr;
-  gap: 0;
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-}
-.p-col-divider {
-  background: linear-gradient(to bottom, transparent, var(--p-border, #8B6914), transparent);
-  margin: calc(8px * var(--ps)) 0;
-}
-.p-specs-col { padding-right: calc(26px * var(--ps)); overflow: hidden; }
-.p-story-col  { padding-left: calc(26px * var(--ps)); overflow: hidden; }
+        .p-corner-tl {
+            position: absolute;
+            bottom: calc(8px * var(--ps));
+            left: calc(8px * var(--ps));
+            width: calc(50px * var(--ps));
+            height: calc(50px * var(--ps));
+            border-bottom: 2px solid var(--p-corner, #C9962A);
+            border-left: 2px solid var(--p-corner, #C9962A);
+            z-index: 10;
+        }
 
-.p-col-title {
-  font-family: 'Oswald', sans-serif;
-  font-size: calc(10px * var(--ps));
-  font-weight: 600;
-  letter-spacing: calc(4px * var(--ps));
-  color: var(--p-accent, #C9962A);
-  text-transform: uppercase;
-  margin-bottom: calc(6px * var(--ps));
-  padding-bottom: calc(4px * var(--ps));
-  border-bottom: 1px solid var(--p-border, #8B6914);
-}
-.p-spec-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding: calc(3px * var(--ps)) 0;
-  border-bottom: 1px solid var(--p-spec-border, #1f1f1f);
-}
-.p-spec-label {
-  font-family: 'Oswald', sans-serif;
-  font-size: calc(10px * var(--ps));
-  font-weight: 400;
-  color: var(--p-label, #888);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-.p-spec-value {
-  font-family: 'Oswald', sans-serif;
-  font-size: calc(10px * var(--ps));
-  font-weight: 600;
-  color: var(--p-value, #E8E8E8);
-  text-align: right;
-  max-width: 58%;
-}
-.p-spec-value.highlight { color: var(--p-accent, #C9962A); }
-.p-spec-value.blank { color: var(--p-blank, #444); font-style: italic; }
+        .p-texture {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255, 255, 255, 0.008) 3px, rgba(255, 255, 255, 0.008) 6px);
+            pointer-events: none;
+        }
 
-.p-story-text {
-  font-family: 'Crimson Pro', serif;
-  font-size: calc(13.5px * var(--ps));
-  line-height: 1.6;
-  color: var(--p-story, #CCCCCC);
-}
-.p-story-text p { margin-bottom: calc(7px * var(--ps)); }
-.p-story-text p:last-child { margin-bottom: 0; }
-.p-story-text strong { color: var(--p-story-strong, #E8E8E8); font-weight: 600; }
-.p-story-text em { color: var(--p-accent, #C9962A); font-style: italic; }
+        /* Poster Header */
+        .p-header {
+            background: linear-gradient(135deg, var(--p-header1, #1C1C1C) 0%, var(--p-header2, #2A2A2A) 50%, var(--p-header1, #1C1C1C) 100%);
+            border-bottom: calc(3px * var(--ps)) solid var(--p-border, #8B6914);
+            padding: calc(16px * var(--ps)) calc(50px * var(--ps)) calc(12px * var(--ps));
+            text-align: center;
+            flex-shrink: 0;
+        }
 
-/* Timeline */
-.p-timeline-section {
-  padding: calc(10px * var(--ps)) calc(44px * var(--ps));
-  border-top: 1px solid var(--p-timeline-border, #222);
-  background: var(--p-timeline-bg, transparent);
-  flex-shrink: 0;
-}
-.p-timeline-title {
-  font-family: 'Oswald', sans-serif;
-  font-size: calc(10px * var(--ps));
-  font-weight: 600;
-  letter-spacing: calc(4px * var(--ps));
-  color: var(--p-accent, #C9962A);
-  text-transform: uppercase;
-  margin-bottom: calc(10px * var(--ps));
-  text-align: center;
-}
-.p-timeline {
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-  padding: 0 calc(10px * var(--ps));
-}
-.p-timeline::before {
-  content: '';
-  position: absolute;
-  top: calc(9px * var(--ps)); left: calc(30px * var(--ps)); right: calc(30px * var(--ps));
-  height: 1px;
-  background: linear-gradient(to right, var(--p-border, #8B6914), var(--p-accent, #C9962A), var(--p-border, #8B6914));
-}
-.p-timeline-item {
-  display: flex; flex-direction: column;
-  align-items: center; gap: calc(6px * var(--ps)); flex: 1;
-}
-.p-timeline-dot {
-  width: calc(18px * var(--ps)); height: calc(18px * var(--ps));
-  background: var(--p-accent, #C9962A);
-  transform: rotate(45deg);
-  flex-shrink: 0;
-}
-.p-timeline-year {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: calc(20px * var(--ps));
-  color: var(--p-accent, #C9962A);
-  line-height: 1;
-}
-.p-timeline-desc {
-  font-family: 'Oswald', sans-serif;
-  font-size: calc(9px * var(--ps));
-  font-weight: 400;
-  color: var(--p-label, #888);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  text-align: center;
-  line-height: 1.4;
-}
+        .p-year-badge {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: calc(14px * var(--ps));
+            letter-spacing: calc(7px * var(--ps));
+            color: var(--p-header-meta-text, var(--p-accent, #C9962A));
+            margin-bottom: calc(4px * var(--ps));
+        }
 
-/* Footer */
-.p-footer {
-  background: linear-gradient(135deg, var(--p-header1, #1C1C1C), var(--p-header2, #2A2A2A), var(--p-header1, #1C1C1C));
-  border-top: calc(3px * var(--ps)) solid var(--p-border, #8B6914);
-  padding: calc(12px * var(--ps)) calc(50px * var(--ps));
-  text-align: center;
-  flex-shrink: 0;
-}
-.p-tagline {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: calc(24px * var(--ps));
-  letter-spacing: calc(5px * var(--ps));
-  color: var(--p-accent, #C9962A);
-}
-.p-sub-tagline {
-  font-family: 'Crimson Pro', serif;
-  font-size: calc(11px * var(--ps));
-  font-style: italic;
-  color: var(--p-label, #888);
-  margin-top: calc(2px * var(--ps));
-  letter-spacing: calc(2px * var(--ps));
-}
+        .p-main-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: calc(70px * var(--ps));
+            line-height: 0.9;
+            color: var(--p-title-text, #FFF);
+            letter-spacing: calc(4px * var(--ps));
+            text-shadow: calc(3px * var(--ps)) calc(3px * var(--ps)) 0px var(--p-title-shadow, var(--p-border, #8B6914)), calc(4px * var(--ps)) calc(4px * var(--ps)) calc(16px * var(--ps)) rgba(0, 0, 0, 0.35);
+        }
 
-/* Loading overlay */
-.download-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.8);
-  z-index: 1000;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 16px;
-}
-.download-overlay.active { display: flex; }
-.download-spinner {
-  width: 48px; height: 48px;
-  border: 3px solid #333;
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.download-overlay p {
-  font-family: 'Oswald', sans-serif;
-  font-size: 14px;
-  letter-spacing: 3px;
-  color: var(--accent);
-  text-transform: uppercase;
-}
-</style>
+        .p-nickname {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: calc(22px * var(--ps));
+            letter-spacing: calc(10px * var(--ps));
+            color: var(--p-header-meta-text, var(--p-accent, #C9962A));
+            margin-top: calc(2px * var(--ps));
+        }
+
+        .p-subtitle {
+            font-family: 'Oswald', sans-serif;
+            font-size: calc(14px * var(--ps));
+            font-weight: 400;
+            color: var(--p-header-meta-text, var(--p-accent, #C9962A));
+            letter-spacing: calc(5px * var(--ps));
+            margin-top: calc(4px * var(--ps));
+        }
+
+        /* Origin Banner */
+        .p-origin {
+            background: linear-gradient(90deg, var(--p-banner1, #8B6914), var(--p-banner2, #C9962A), var(--p-banner1, #8B6914));
+            padding: calc(8px * var(--ps)) calc(50px * var(--ps));
+            text-align: center;
+            border-bottom: calc(2px * var(--ps)) solid var(--p-border, #8B6914);
+            flex-shrink: 0;
+        }
+
+        .p-origin p {
+            font-family: 'Oswald', sans-serif;
+            font-size: calc(13px * var(--ps));
+            font-weight: 600;
+            letter-spacing: calc(3px * var(--ps));
+            color: var(--p-banner-text, #0d0d0d);
+            text-transform: uppercase;
+        }
+
+        /* Content Grid */
+        .p-content {
+            padding: calc(14px * var(--ps)) calc(44px * var(--ps));
+            display: grid;
+            grid-template-columns: 1fr 1px 1fr;
+            gap: 0;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .p-col-divider {
+            background: linear-gradient(to bottom, transparent, var(--p-border, #8B6914), transparent);
+            margin: calc(8px * var(--ps)) 0;
+        }
+
+        .p-specs-col {
+            padding-right: calc(26px * var(--ps));
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .p-story-col {
+            padding-left: calc(26px * var(--ps));
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .p-col-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: calc(10px * var(--ps));
+            font-weight: 600;
+            letter-spacing: calc(4px * var(--ps));
+            color: var(--p-section-title, var(--p-accent, #C9962A));
+            text-transform: uppercase;
+            margin-bottom: calc(6px * var(--ps));
+            padding-bottom: calc(4px * var(--ps));
+            border-bottom: 1px solid var(--p-border, #8B6914);
+        }
+
+        .p-spec-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: calc(3px * var(--ps)) 0;
+            border-bottom: 1px solid var(--p-spec-border, #1f1f1f);
+        }
+
+        .p-spec-label {
+            font-family: 'Oswald', sans-serif;
+            font-size: calc(10px * var(--ps));
+            font-weight: 400;
+            color: var(--p-label, #888);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .p-spec-value {
+            font-family: 'Oswald', sans-serif;
+            font-size: calc(10px * var(--ps));
+            font-weight: 600;
+            color: var(--p-value, #E8E8E8);
+            text-align: right;
+            max-width: 58%;
+        }
+
+        .p-spec-value.highlight {
+            color: var(--p-highlight, var(--p-accent, #C9962A));
+        }
+
+        .p-spec-value.blank {
+            color: var(--p-blank, #444);
+            font-style: italic;
+        }
+
+        .p-story-text {
+            font-family: 'Crimson Pro', serif;
+            font-size: calc(13.5px * var(--ps));
+            line-height: 1.6;
+            color: var(--p-story, #CCCCCC);
+        }
+
+        .p-story-text p {
+            margin-bottom: calc(7px * var(--ps));
+        }
+
+        .p-story-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        .p-story-text strong {
+            color: var(--p-story-strong, #E8E8E8);
+            font-weight: 600;
+        }
+
+        .p-story-text em {
+            color: var(--p-emphasis, var(--p-accent, #C9962A));
+            font-style: italic;
+        }
+
+        .p-story-text .accent-mark {
+            color: var(--p-highlight, var(--p-accent, #C9962A));
+            font-weight: 600;
+        }
+
+        /* Timeline */
+        .p-timeline-section {
+            padding: calc(10px * var(--ps)) calc(44px * var(--ps));
+            border-top: 1px solid var(--p-timeline-border, #222);
+            background: var(--p-timeline-bg, transparent);
+            flex-shrink: 0;
+        }
+
+        .p-timeline-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: calc(10px * var(--ps));
+            font-weight: 600;
+            letter-spacing: calc(4px * var(--ps));
+            color: var(--p-section-title, var(--p-accent, #C9962A));
+            text-transform: uppercase;
+            margin-bottom: calc(10px * var(--ps));
+            text-align: center;
+        }
+
+        .p-timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            padding: 0 calc(10px * var(--ps));
+        }
+
+        .p-timeline::before {
+            content: '';
+            position: absolute;
+            top: calc(9px * var(--ps));
+            left: calc(30px * var(--ps));
+            right: calc(30px * var(--ps));
+            height: 1px;
+            background: linear-gradient(to right, var(--p-border, #8B6914), var(--p-accent, #C9962A), var(--p-border, #8B6914));
+        }
+
+        .p-timeline-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: calc(6px * var(--ps));
+            flex: 1;
+        }
+
+        .p-timeline-meta {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .p-timeline-dot {
+            width: calc(18px * var(--ps));
+            height: calc(18px * var(--ps));
+            background: var(--p-accent, #C9962A);
+            transform: rotate(45deg);
+            flex-shrink: 0;
+        }
+
+        .p-timeline-year {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: calc(20px * var(--ps));
+            color: var(--p-timeline-year-text, var(--p-accent, #C9962A));
+            line-height: 1;
+            text-align: center;
+        }
+
+        .p-timeline-desc {
+            font-family: 'Oswald', sans-serif;
+            font-size: calc(9px * var(--ps));
+            font-weight: 400;
+            color: var(--p-label, #888);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        /* Footer */
+        .p-footer {
+            background: linear-gradient(135deg, var(--p-header1, #1C1C1C), var(--p-header2, #2A2A2A), var(--p-header1, #1C1C1C));
+            border-top: calc(3px * var(--ps)) solid var(--p-border, #8B6914);
+            padding: calc(12px * var(--ps)) calc(50px * var(--ps));
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .p-tagline {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: calc(24px * var(--ps));
+            letter-spacing: calc(5px * var(--ps));
+            color: var(--p-footer-text, var(--p-accent, #C9962A));
+        }
+
+        .p-sub-tagline {
+            font-family: 'Crimson Pro', serif;
+            font-size: calc(11px * var(--ps));
+            font-style: italic;
+            color: var(--p-label, #888);
+            margin-top: calc(2px * var(--ps));
+            letter-spacing: calc(2px * var(--ps));
+        }
+
+        /* Loading overlay */
+        .download-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .download-overlay.active {
+            display: flex;
+        }
+
+        .download-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid #333;
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .download-overlay p {
+            font-family: 'Oswald', sans-serif;
+            font-size: 14px;
+            letter-spacing: 3px;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+    </style>
 </head>
+
 <body>
 
-<div class="app">
-  <!-- TOP BAR -->
-  <div class="topbar">
-    <div class="topbar-brand">
-      Classic Poster Builder
-      <span>· Make Your Own</span>
+    <div class="app">
+        <!-- TOP BAR -->
+        <div class="topbar">
+            <div class="topbar-brand">
+                Classic Poster Builder
+                <span>· Make Your Own</span>
+            </div>
+            <div class="topbar-actions">
+                <button class="btn btn-secondary" onclick="resetToGumby()">↺ Reset to Gumby</button>
+                <button class="btn btn-primary" id="downloadBtn" onclick="downloadPoster()">⬇ Download PNG</button>
+            </div>
+        </div>
+
+        <!-- EDITOR PANEL -->
+        <div class="editor-panel">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('vehicle')">Vehicle</button>
+                <button class="tab" onclick="switchTab('specs')">Specs</button>
+                <button class="tab" onclick="switchTab('story')">Story</button>
+                <button class="tab" onclick="switchTab('timeline')">Timeline</button>
+                <button class="tab" onclick="switchTab('colors')">Colors</button>
+            </div>
+
+            <!-- VEHICLE TAB -->
+            <div id="tab-vehicle" class="tab-content active">
+                <div class="section-label">Poster Size</div>
+                <div class="field-group">
+                    <label>Aspect Ratio Preset</label>
+                    <div id="ratio-presets"
+                        style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;"></div>
+                </div>
+                <div class="field-row">
+                    <div class="field-group">
+                        <label>Width (inches)</label>
+                        <input type="number" id="f-ratio-w" value="24" min="1" max="60" step="1"
+                            oninput="onRatioInput()"
+                            style="padding:9px 12px;width:100%;background:var(--input-bg);border:1px solid var(--input-border);border-radius:4px;color:var(--text-primary);font-family:Barlow,sans-serif;font-size:14px;">
+                    </div>
+                    <div class="field-group">
+                        <label>Height (inches)</label>
+                        <input type="number" id="f-ratio-h" value="36" min="1" max="60" step="1"
+                            oninput="onRatioInput()"
+                            style="padding:9px 12px;width:100%;background:var(--input-bg);border:1px solid var(--input-border);border-radius:4px;color:var(--text-primary);font-family:Barlow,sans-serif;font-size:14px;">
+                    </div>
+                </div>
+                <p id="ratio-display"
+                    style="font-size:11px;color:var(--text-secondary);margin-top:-8px;margin-bottom:16px;"></p>
+
+                <div class="section-label">Header Info</div>
+                <div class="field-group">
+                    <label>Assembly Line (top badge)</label>
+                    <input type="text" id="f-badge" oninput="update()"
+                        placeholder="e.g. ASSEMBLED IN FLINT, MICHIGAN · 1970">
+                </div>
+                <div class="field-group">
+                    <label>Main Title</label>
+                    <input type="text" id="f-title" oninput="update()" placeholder="e.g. CHEVROLET C10">
+                </div>
+                <div class="field-group">
+                    <label>Nickname (shown in quotes)</label>
+                    <input type="text" id="f-nickname" oninput="update()" placeholder="e.g. GUMBY">
+                </div>
+                <div class="field-group">
+                    <label>Subtitle</label>
+                    <input type="text" id="f-subtitle" oninput="update()"
+                        placeholder="e.g. 350 V8 · Long Bed · Three on the Tree">
+                </div>
+
+                <div class="section-label">Origin Banner</div>
+                <div class="field-group">
+                    <label>Origin / Sold At</label>
+                    <input type="text" id="f-origin" oninput="update()"
+                        placeholder="e.g. Sold New · Hoffpauier Chevrolet · Lampasas, Texas">
+                </div>
+
+                <div class="section-label">Footer</div>
+                <div class="field-group">
+                    <label>Tagline</label>
+                    <input type="text" id="f-tagline" oninput="update()"
+                        placeholder="e.g. This Is Not A Restoration. This Is The Real Thing.">
+                </div>
+                <div class="field-group">
+                    <label>Sub-tagline</label>
+                    <input type="text" id="f-subtagline" oninput="update()"
+                        placeholder="e.g. Built when America made things to last · Still proving it">
+                </div>
+            </div>
+
+            <!-- SPECS TAB -->
+            <div id="tab-specs" class="tab-content">
+                <div class="section-label">Specifications</div>
+                <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;line-height:1.5;">Add, edit, or
+                    remove rows and sections. Toggle the highlight to make a value gold.</p>
+                <div id="spec-sections-list"></div>
+                <button class="add-spec-btn" onclick="addSpecSection()">+ Add Section</button>
+            </div>
+
+            <!-- STORY TAB -->
+            <div id="tab-story" class="tab-content">
+                <div class="section-label">Story Paragraphs</div>
+                <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;line-height:1.5;">Each paragraph
+                    appears separately. Use **bold**, _italic_, and ==accent== for emphasis.</p>
+                <div id="story-list"></div>
+                <button class="add-spec-btn" onclick="addStoryPara()">+ Add Paragraph</button>
+            </div>
+
+            <!-- TIMELINE TAB -->
+            <div id="tab-timeline" class="tab-content">
+                <div class="section-label">Timeline Events</div>
+                <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;line-height:1.5;">Up to 5 events
+                    recommended.</p>
+                <div id="timeline-list"></div>
+                <button class="add-spec-btn" onclick="addTimelineEvent()">+ Add Event</button>
+                <div class="field-group" style="margin-top:16px;">
+                    <label>Timeline Section Title</label>
+                    <input type="text" id="f-timeline-title" oninput="update()"
+                        placeholder="e.g. 55 Years of American Road">
+                </div>
+            </div>
+
+            <!-- COLORS TAB -->
+            <div id="tab-colors" class="tab-content">
+                <div class="section-label">Theme Presets</div>
+                <div class="theme-presets" id="theme-presets"></div>
+
+                <div class="section-label">Custom Colors</div>
+                <div class="color-pickers">
+                    <div class="color-field">
+                        <label>Background</label>
+                        <div class="color-input-row">
+                            <input type="color" id="c-sign-bg" oninput="syncColor('sign-bg')"
+                                onchange="syncColor('sign-bg')">
+                            <input type="text" id="c-sign-bg-hex" oninput="syncColorFromHex('sign-bg')" maxlength="7"
+                                placeholder="#0d0d0d">
+                        </div>
+                    </div>
+                    <div class="color-field">
+                        <label>Accent / Gold</label>
+                        <div class="color-input-row">
+                            <input type="color" id="c-accent" oninput="syncColor('accent')"
+                                onchange="syncColor('accent')">
+                            <input type="text" id="c-accent-hex" oninput="syncColorFromHex('accent')" maxlength="7"
+                                placeholder="#C9962A">
+                        </div>
+                    </div>
+                    <div class="color-field">
+                        <label>Header / Footer BG</label>
+                        <div class="color-input-row">
+                            <input type="color" id="c-header" oninput="syncColor('header')"
+                                onchange="syncColor('header')">
+                            <input type="text" id="c-header-hex" oninput="syncColorFromHex('header')" maxlength="7"
+                                placeholder="#1C1C1C">
+                        </div>
+                    </div>
+                    <div class="color-field">
+                        <label>Body Text</label>
+                        <div class="color-input-row">
+                            <input type="color" id="c-body-text" oninput="syncColor('body-text')"
+                                onchange="syncColor('body-text')">
+                            <input type="text" id="c-body-text-hex" oninput="syncColorFromHex('body-text')"
+                                maxlength="7" placeholder="#CCCCCC">
+                        </div>
+                    </div>
+                    <div class="color-field">
+                        <label>Banner BG</label>
+                        <div class="color-input-row">
+                            <input type="color" id="c-banner" oninput="syncColor('banner')"
+                                onchange="syncColor('banner')">
+                            <input type="text" id="c-banner-hex" oninput="syncColorFromHex('banner')" maxlength="7"
+                                placeholder="#8B6914">
+                        </div>
+                    </div>
+                    <div class="color-field">
+                        <label>Banner Text</label>
+                        <div class="color-input-row">
+                            <input type="color" id="c-banner-text" oninput="syncColor('banner-text')"
+                                onchange="syncColor('banner-text')">
+                            <input type="text" id="c-banner-text-hex" oninput="syncColorFromHex('banner-text')"
+                                maxlength="7" placeholder="#0d0d0d">
+                        </div>
+                    </div>
+                    <div class="color-field">
+                        <label>Label Text (Secondary)</label>
+                        <div class="color-input-row">
+                            <input type="color" id="c-label" oninput="syncColor('label')" onchange="syncColor('label')">
+                            <input type="text" id="c-label-hex" oninput="syncColorFromHex('label')" maxlength="7"
+                                placeholder="#888888">
+                        </div>
+                    </div>
+                    <div class="color-field">
+                        <label>Primary Text / Values</label>
+                        <div class="color-input-row">
+                            <input type="color" id="c-value" oninput="syncColor('value')" onchange="syncColor('value')">
+                            <input type="text" id="c-value-hex" oninput="syncColorFromHex('value')" maxlength="7"
+                                placeholder="#E8E8E8">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-resizer" id="panel-resizer" aria-label="Resize editor panel"></div>
+
+        <!-- PREVIEW PANEL -->
+        <div class="preview-panel" id="preview-panel">
+            <div class="poster-scale-wrapper" id="scale-wrapper">
+                <div id="poster">
+                    <div class="p-texture"></div>
+                    <div class="p-corner-br"></div>
+                    <div class="p-corner-tl"></div>
+
+                    <div class="p-header">
+                        <div class="p-year-badge" id="p-badge"></div>
+                        <div class="p-main-title" id="p-title"></div>
+                        <div class="p-nickname" id="p-nickname"></div>
+                        <div class="p-subtitle" id="p-subtitle"></div>
+                    </div>
+
+                    <div class="p-origin">
+                        <p id="p-origin"></p>
+                    </div>
+
+                    <div class="p-content">
+                        <div class="p-specs-col">
+                            <div id="p-specs"></div>
+                        </div>
+                        <div class="p-col-divider"></div>
+                        <div class="p-story-col">
+                            <div class="p-col-title">The Story</div>
+                            <div class="p-story-text" id="p-story"></div>
+                        </div>
+                    </div>
+
+                    <div class="p-timeline-section">
+                        <div class="p-timeline-title" id="p-timeline-title"></div>
+                        <div class="p-timeline" id="p-timeline"></div>
+                    </div>
+
+                    <div class="p-footer">
+                        <div class="p-tagline" id="p-tagline"></div>
+                        <div class="p-sub-tagline" id="p-subtagline"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="topbar-actions">
-      <button class="btn btn-secondary" onclick="resetToGumby()">↺ Reset to Gumby</button>
-      <button class="btn btn-primary" id="downloadBtn" onclick="downloadPoster()">⬇ Download PNG</button>
-    </div>
-  </div>
 
-  <!-- EDITOR PANEL -->
-  <div class="editor-panel">
-    <div class="tabs">
-      <button class="tab active" onclick="switchTab('vehicle')">Vehicle</button>
-      <button class="tab" onclick="switchTab('specs')">Specs</button>
-      <button class="tab" onclick="switchTab('story')">Story</button>
-      <button class="tab" onclick="switchTab('timeline')">Timeline</button>
-      <button class="tab" onclick="switchTab('colors')">Colors</button>
+    <!-- Download overlay -->
+    <div class="download-overlay" id="download-overlay">
+        <div class="download-spinner"></div>
+        <p>Rendering Poster...</p>
     </div>
 
-    <!-- VEHICLE TAB -->
-    <div id="tab-vehicle" class="tab-content active">
-      <div class="section-label">Poster Size</div>
-      <div class="field-group">
-        <label>Aspect Ratio Preset</label>
-        <div id="ratio-presets" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;"></div>
-      </div>
-      <div class="field-row">
-        <div class="field-group">
-          <label>Width (inches)</label>
-          <input type="number" id="f-ratio-w" value="24" min="1" max="60" step="1" oninput="onRatioInput()" style="padding:9px 12px;width:100%;background:var(--input-bg);border:1px solid var(--input-border);border-radius:4px;color:var(--text-primary);font-family:Barlow,sans-serif;font-size:14px;">
-        </div>
-        <div class="field-group">
-          <label>Height (inches)</label>
-          <input type="number" id="f-ratio-h" value="36" min="1" max="60" step="1" oninput="onRatioInput()" style="padding:9px 12px;width:100%;background:var(--input-bg);border:1px solid var(--input-border);border-radius:4px;color:var(--text-primary);font-family:Barlow,sans-serif;font-size:14px;">
-        </div>
-      </div>
-      <p id="ratio-display" style="font-size:11px;color:var(--text-secondary);margin-top:-8px;margin-bottom:16px;"></p>
+    <script>
+        // ═══════════════════════════════════════
+        // DATA MODEL
+        // ═══════════════════════════════════════
+        const GUMBY_DATA = {
+            badge: "ASSEMBLED IN FLINT, MICHIGAN · 1970",
+            title: "CHEVROLET C10",
+            nickname: "GUMBY",
+            subtitle: "350 V8 · Long Bed · Three on the Tree",
+            origin: "Sold New · Hoffpauier Chevrolet · Lampasas, Texas · Est. 1970",
+            tagline: "This Is Not A Restoration. This Is The Real Thing.",
+            subtagline: "Built when America made things to last · Still proving it",
+            timelineTitle: "55 Years of American Road",
+            specSections: [
+                {
+                    title: "By The Numbers",
+                    dashWhenEmpty: false,
+                    rows: [
+                        { label: "Engine", value: "350ci Small Block V8", highlight: true },
+                        { label: "Carburetor", value: "Edelbrock 1406 · 600 CFM", highlight: false },
+                        { label: "Transmission", value: "Saginaw 3-Speed Manual", highlight: false },
+                        { label: "Shift", value: "Column — Three on the Tree", highlight: false },
+                        { label: "Brakes", value: "Manual Drum · All Four", highlight: false },
+                        { label: "Steering", value: "Manual", highlight: false },
+                        { label: "Drive", value: "2WD Conventional", highlight: false },
+                        { label: "Bed", value: "Long Bed · 8 ft", highlight: false },
+                        { label: "A/C", value: "Factory Equipped", highlight: true },
+                        { label: "Bumper", value: "Ruffneck HD · Perry Co., Waco TX", highlight: true },
+                        { label: "Gun Rack", value: "Original · Still Installed", highlight: true },
+                        { label: "Ignition", value: "Points · Original", highlight: false },
+                        { label: "Est. Mileage", value: "~186,000", highlight: false },
+                        { label: "Title", value: "Clean · One Owner 41 Years", highlight: true },
+                    ],
+                },
+                {
+                    title: "Cowl Tag",
+                    dashWhenEmpty: true,
+                    rows: [
+                        { label: "Build Date", value: "", highlight: false },
+                        { label: "Paint Code", value: "", highlight: false },
+                        { label: "Trim Code", value: "", highlight: false },
+                        { label: "Engine Code", value: "", highlight: false },
+                        { label: "Axle Code", value: "", highlight: false },
+                    ],
+                },
+            ],
+            story: [
+                "This truck rolled off the line in **Flint, Michigan** in 1970 — the last uninhibited year of American truck production before emissions regulations changed everything forever.",
+                "It was sold new at ==Hoffpauier Chevrolet in Lampasas, Texas==, where the dealership installed a **Ruffneck HD bumper** — manufactured by Perry Co. in Waco — with the dealership's name **cast permanently into the steel**. That bumper is still on this truck today.",
+                "The configuration tells the story: long bed, factory air conditioning, heavy duty bumper, gun rack. This was a **working ranch truck**, ordered by a Hill Country rancher who needed a truck that could work as hard as he did.",
+                "Title records place it in **Mississippi by 1985**, where it spent approximately forty years under a single long term owner — a non-salt state — which is largely why the frame is solid and the bones are strong after 55 years.",
+                "In 2026 it was purchased in **Belle Chasse, Louisiana** and made its first drive home through ==New Orleans downtown rush hour==, across Lake Pontchartrain, and back to Picayune, Mississippi — without missing a beat. Fifty-five years old and still earning it.",
+            ],
+            timeline: [
+                { year: "1970", desc: "Built in Flint\nSold in Lampasas, TX" },
+                { year: "1985", desc: "Mississippi\n~86,000 Miles" },
+                { year: "2025", desc: "Surfaces in\nLouisiana" },
+                { year: "2026", desc: "Home · Picayune\nMississippi" },
+            ],
+            colors: {
+                'sign-bg': '#0d0d0d',
+                'accent': '#C9962A',
+                'header': '#1C1C1C',
+                'body-text': '#CCCCCC',
+                'banner': '#8B6914',
+                'banner-text': '#0d0d0d',
+                'label': '#888888',
+                'value': '#E8E8E8',
+            }
+        };
 
-      <div class="section-label">Header Info</div>
-      <div class="field-group">
-        <label>Assembly Line (top badge)</label>
-        <input type="text" id="f-badge" oninput="update()" placeholder="e.g. ASSEMBLED IN FLINT, MICHIGAN · 1970">
-      </div>
-      <div class="field-group">
-        <label>Main Title</label>
-        <input type="text" id="f-title" oninput="update()" placeholder="e.g. CHEVROLET C10">
-      </div>
-      <div class="field-group">
-        <label>Nickname (shown in quotes)</label>
-        <input type="text" id="f-nickname" oninput="update()" placeholder="e.g. GUMBY">
-      </div>
-      <div class="field-group">
-        <label>Subtitle</label>
-        <input type="text" id="f-subtitle" oninput="update()" placeholder="e.g. 350 V8 · Long Bed · Three on the Tree">
-      </div>
+        // THEME PRESETS
+        const THEMES = [
+            {
+                name: "Night Gold",
+                colors: { 'sign-bg': '#0d0d0d', 'accent': '#C9962A', 'header': '#1C1C1C', 'body-text': '#CCCCCC', 'banner': '#8B6914', 'banner-text': '#0d0d0d', 'label': '#888888', 'value': '#E8E8E8' }
+            },
+            {
+                name: "Ranch Green",
+                colors: { 'sign-bg': '#F4F1E8', 'accent': '#0C9741', 'header': '#2D5016', 'body-text': '#333328', 'banner': '#3D6B20', 'banner-text': '#FFFFFF', 'label': '#888878', 'value': '#1A1A0F' }
+            },
+            {
+                name: "Midnight Blue",
+                colors: { 'sign-bg': '#0A0E1A', 'accent': '#4A8FD4', 'header': '#0D1628', 'body-text': '#B8C8DC', 'banner': '#1A3A6A', 'banner-text': '#FFFFFF', 'label': '#6A7A8A', 'value': '#D8E8F0' }
+            },
+            {
+                name: "Crimson",
+                colors: { 'sign-bg': '#0F0808', 'accent': '#CC2222', 'header': '#1A0A0A', 'body-text': '#DDCCCC', 'banner': '#8B1A1A', 'banner-text': '#FFFFFF', 'label': '#886666', 'value': '#F0E0E0' }
+            },
+            {
+                name: "Chrome",
+                colors: { 'sign-bg': '#1A1A1A', 'accent': '#C8C8C8', 'header': '#111111', 'body-text': '#BBBBBB', 'banner': '#444444', 'banner-text': '#111111', 'label': '#777777', 'value': '#EEEEEE' }
+            },
+            {
+                name: "Sunset",
+                colors: { 'sign-bg': '#12080A', 'accent': '#E8823A', 'header': '#1E0C0E', 'body-text': '#D4B8A8', 'banner': '#8B3A14', 'banner-text': '#FFF8F0', 'label': '#886655', 'value': '#F0E0D0' }
+            },
+        ];
 
-      <div class="section-label">Origin Banner</div>
-      <div class="field-group">
-        <label>Origin / Sold At</label>
-        <input type="text" id="f-origin" oninput="update()" placeholder="e.g. Sold New · Hoffpauier Chevrolet · Lampasas, Texas">
-      </div>
+        let state = JSON.parse(JSON.stringify(GUMBY_DATA));
 
-      <div class="section-label">Footer</div>
-      <div class="field-group">
-        <label>Tagline</label>
-        <input type="text" id="f-tagline" oninput="update()" placeholder="e.g. This Is Not A Restoration. This Is The Real Thing.">
-      </div>
-      <div class="field-group">
-        <label>Sub-tagline</label>
-        <input type="text" id="f-subtagline" oninput="update()" placeholder="e.g. Built when America made things to last · Still proving it">
-      </div>
-    </div>
+        // ═══════════════════════════════════════
+        // ASPECT RATIO PRESETS
+        // ═══════════════════════════════════════
+        const RATIO_PRESETS = [
+            { label: '24×36', w: 24, h: 36 },
+            { label: '18×24', w: 18, h: 24 },
+            { label: '16×20', w: 16, h: 20 },
+            { label: '11×14', w: 11, h: 14 },
+            { label: '12×18', w: 12, h: 18 },
+            { label: '24×24', w: 24, h: 24 },
+            { label: '36×24', w: 36, h: 24 },
+            { label: 'Custom', w: null, h: null },
+        ];
 
-    <!-- SPECS TAB -->
-    <div id="tab-specs" class="tab-content">
-      <div class="section-label">Specifications</div>
-      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;line-height:1.5;">Add, edit, or remove spec rows. Toggle the highlight to make a value gold.</p>
-      <div id="specs-list"></div>
-      <button class="add-spec-btn" onclick="addSpec()">+ Add Spec Row</button>
+        const POSTER_W = 800; // fixed render width, always
+        const BASELINE_H = 1200; // --ps = 1 at this height
 
-      <div class="section-label" style="margin-top:20px;">Cowl Tag</div>
-      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;line-height:1.5;">Leave blank to show dashes (fill in when you find the cowl tag).</p>
-      <div id="cowl-list"></div>
-    </div>
-
-    <!-- STORY TAB -->
-    <div id="tab-story" class="tab-content">
-      <div class="section-label">Story Paragraphs</div>
-      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;line-height:1.5;">Each paragraph appears separately. Use **bold** and _italic_ for emphasis.</p>
-      <div id="story-list"></div>
-      <button class="add-spec-btn" onclick="addStoryPara()">+ Add Paragraph</button>
-    </div>
-
-    <!-- TIMELINE TAB -->
-    <div id="tab-timeline" class="tab-content">
-      <div class="section-label">Timeline Events</div>
-      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;line-height:1.5;">Up to 5 events recommended.</p>
-      <div id="timeline-list"></div>
-      <button class="add-spec-btn" onclick="addTimelineEvent()">+ Add Event</button>
-      <div class="field-group" style="margin-top:16px;">
-        <label>Timeline Section Title</label>
-        <input type="text" id="f-timeline-title" oninput="update()" placeholder="e.g. 55 Years of American Road">
-      </div>
-    </div>
-
-    <!-- COLORS TAB -->
-    <div id="tab-colors" class="tab-content">
-      <div class="section-label">Theme Presets</div>
-      <div class="theme-presets" id="theme-presets"></div>
-
-      <div class="section-label">Custom Colors</div>
-      <div class="color-pickers">
-        <div class="color-field">
-          <label>Background</label>
-          <div class="color-input-row">
-            <input type="color" id="c-sign-bg" oninput="syncColor('sign-bg')" onchange="syncColor('sign-bg')">
-            <input type="text" id="c-sign-bg-hex" oninput="syncColorFromHex('sign-bg')" maxlength="7" placeholder="#0d0d0d">
-          </div>
-        </div>
-        <div class="color-field">
-          <label>Accent / Gold</label>
-          <div class="color-input-row">
-            <input type="color" id="c-accent" oninput="syncColor('accent')" onchange="syncColor('accent')">
-            <input type="text" id="c-accent-hex" oninput="syncColorFromHex('accent')" maxlength="7" placeholder="#C9962A">
-          </div>
-        </div>
-        <div class="color-field">
-          <label>Header BG</label>
-          <div class="color-input-row">
-            <input type="color" id="c-header" oninput="syncColor('header')" onchange="syncColor('header')">
-            <input type="text" id="c-header-hex" oninput="syncColorFromHex('header')" maxlength="7" placeholder="#1C1C1C">
-          </div>
-        </div>
-        <div class="color-field">
-          <label>Body Text</label>
-          <div class="color-input-row">
-            <input type="color" id="c-body-text" oninput="syncColor('body-text')" onchange="syncColor('body-text')">
-            <input type="text" id="c-body-text-hex" oninput="syncColorFromHex('body-text')" maxlength="7" placeholder="#CCCCCC">
-          </div>
-        </div>
-        <div class="color-field">
-          <label>Banner BG</label>
-          <div class="color-input-row">
-            <input type="color" id="c-banner" oninput="syncColor('banner')" onchange="syncColor('banner')">
-            <input type="text" id="c-banner-hex" oninput="syncColorFromHex('banner')" maxlength="7" placeholder="#8B6914">
-          </div>
-        </div>
-        <div class="color-field">
-          <label>Banner Text</label>
-          <div class="color-input-row">
-            <input type="color" id="c-banner-text" oninput="syncColor('banner-text')" onchange="syncColor('banner-text')">
-            <input type="text" id="c-banner-text-hex" oninput="syncColorFromHex('banner-text')" maxlength="7" placeholder="#0d0d0d">
-          </div>
-        </div>
-        <div class="color-field">
-          <label>Spec Labels</label>
-          <div class="color-input-row">
-            <input type="color" id="c-label" oninput="syncColor('label')" onchange="syncColor('label')">
-            <input type="text" id="c-label-hex" oninput="syncColorFromHex('label')" maxlength="7" placeholder="#888888">
-          </div>
-        </div>
-        <div class="color-field">
-          <label>Spec Values</label>
-          <div class="color-input-row">
-            <input type="color" id="c-value" oninput="syncColor('value')" onchange="syncColor('value')">
-            <input type="text" id="c-value-hex" oninput="syncColorFromHex('value')" maxlength="7" placeholder="#E8E8E8">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PREVIEW PANEL -->
-  <div class="preview-panel" id="preview-panel">
-    <div class="poster-scale-wrapper" id="scale-wrapper">
-      <div id="poster">
-        <div class="p-texture"></div>
-        <div class="p-corner-br"></div>
-        <div class="p-corner-tl"></div>
-
-        <div class="p-header">
-          <div class="p-year-badge" id="p-badge"></div>
-          <div class="p-main-title" id="p-title"></div>
-          <div class="p-nickname" id="p-nickname"></div>
-          <div class="p-subtitle" id="p-subtitle"></div>
-        </div>
-
-        <div class="p-origin">
-          <p id="p-origin"></p>
-        </div>
-
-        <div class="p-content">
-          <div class="p-specs-col">
-            <div class="p-col-title">By The Numbers</div>
-            <div id="p-specs"></div>
-            <div id="p-cowl-section"></div>
-          </div>
-          <div class="p-col-divider"></div>
-          <div class="p-story-col">
-            <div class="p-col-title">The Story</div>
-            <div class="p-story-text" id="p-story"></div>
-          </div>
-        </div>
-
-        <div class="p-timeline-section">
-          <div class="p-timeline-title" id="p-timeline-title"></div>
-          <div class="p-timeline" id="p-timeline"></div>
-        </div>
-
-        <div class="p-footer">
-          <div class="p-tagline" id="p-tagline"></div>
-          <div class="p-sub-tagline" id="p-subtagline"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Download overlay -->
-<div class="download-overlay" id="download-overlay">
-  <div class="download-spinner"></div>
-  <p>Rendering Poster...</p>
-</div>
-
-<script>
-// ═══════════════════════════════════════
-// DATA MODEL
-// ═══════════════════════════════════════
-const GUMBY_DATA = {
-  badge: "ASSEMBLED IN FLINT, MICHIGAN · 1970",
-  title: "CHEVROLET C10",
-  nickname: "GUMBY",
-  subtitle: "350 V8 · Long Bed · Three on the Tree",
-  origin: "Sold New · Hoffpauier Chevrolet · Lampasas, Texas · Est. 1970",
-  tagline: "This Is Not A Restoration. This Is The Real Thing.",
-  subtagline: "Built when America made things to last · Still proving it",
-  timelineTitle: "55 Years of American Road",
-  specs: [
-    { label: "Engine", value: "350ci Small Block V8", highlight: true },
-    { label: "Carburetor", value: "Edelbrock 1406 · 600 CFM", highlight: false },
-    { label: "Transmission", value: "Saginaw 3-Speed Manual", highlight: false },
-    { label: "Shift", value: "Column — Three on the Tree", highlight: false },
-    { label: "Brakes", value: "Manual Drum · All Four", highlight: false },
-    { label: "Steering", value: "Manual", highlight: false },
-    { label: "Drive", value: "2WD Conventional", highlight: false },
-    { label: "Bed", value: "Long Bed · 8 ft", highlight: false },
-    { label: "A/C", value: "Factory Equipped", highlight: true },
-    { label: "Bumper", value: "Ruffneck HD · Perry Co., Waco TX", highlight: true },
-    { label: "Gun Rack", value: "Original · Still Installed", highlight: true },
-    { label: "Ignition", value: "Points · Original", highlight: false },
-    { label: "Est. Mileage", value: "~186,000", highlight: false },
-    { label: "Title", value: "Clean · One Owner 41 Years", highlight: true },
-  ],
-  cowl: [
-    { label: "Build Date", value: "" },
-    { label: "Paint Code", value: "" },
-    { label: "Trim Code", value: "" },
-    { label: "Engine Code", value: "" },
-    { label: "Axle Code", value: "" },
-  ],
-  story: [
-    "This truck rolled off the line in **Flint, Michigan** in 1970 — the last uninhibited year of American truck production before emissions regulations changed everything forever.",
-    "It was sold new at _Hoffpauier Chevrolet in Lampasas, Texas_, where the dealership installed a **Ruffneck HD bumper** — manufactured by Perry Co. in Waco — with the dealership's name **cast permanently into the steel**. That bumper is still on this truck today.",
-    "The configuration tells the story: long bed, factory air conditioning, heavy duty bumper, gun rack. This was a **working ranch truck**, ordered by a Hill Country rancher who needed a truck that could work as hard as he did.",
-    "Title records place it in **Mississippi by 1985**, where it spent approximately forty years under a single long term owner — a non-salt state — which is largely why the frame is solid and the bones are strong after 55 years.",
-    "In 2026 it was purchased in **Belle Chasse, Louisiana** and made its first drive home through _New Orleans downtown rush hour_, across Lake Pontchartrain, and back to Picayune, Mississippi — without missing a beat. Fifty-five years old and still earning it.",
-  ],
-  timeline: [
-    { year: "1970", desc: "Built in Flint\nSold in Lampasas, TX" },
-    { year: "1985", desc: "Mississippi\n~86,000 Miles" },
-    { year: "2025", desc: "Surfaces in\nLouisiana" },
-    { year: "2026", desc: "Home · Picayune\nMississippi" },
-  ],
-  colors: {
-    'sign-bg': '#0d0d0d',
-    'accent':  '#C9962A',
-    'header':  '#1C1C1C',
-    'body-text':'#CCCCCC',
-    'banner':  '#8B6914',
-    'banner-text':'#0d0d0d',
-    'label':   '#888888',
-    'value':   '#E8E8E8',
-  }
-};
-
-// THEME PRESETS
-const THEMES = [
-  {
-    name: "Night Gold",
-    colors: { 'sign-bg':'#0d0d0d','accent':'#C9962A','header':'#1C1C1C','body-text':'#CCCCCC','banner':'#8B6914','banner-text':'#0d0d0d','label':'#888888','value':'#E8E8E8' }
-  },
-  {
-    name: "Ranch Green",
-    colors: { 'sign-bg':'#F4F1E8','accent':'#2D5016','header':'#2D5016','body-text':'#333328','banner':'#3D6B20','banner-text':'#FFFFFF','label':'#888878','value':'#1A1A0F' }
-  },
-  {
-    name: "Midnight Blue",
-    colors: { 'sign-bg':'#0A0E1A','accent':'#4A8FD4','header':'#0D1628','body-text':'#B8C8DC','banner':'#1A3A6A','banner-text':'#FFFFFF','label':'#6A7A8A','value':'#D8E8F0' }
-  },
-  {
-    name: "Crimson",
-    colors: { 'sign-bg':'#0F0808','accent':'#CC2222','header':'#1A0A0A','body-text':'#DDCCCC','banner':'#8B1A1A','banner-text':'#FFFFFF','label':'#886666','value':'#F0E0E0' }
-  },
-  {
-    name: "Chrome",
-    colors: { 'sign-bg':'#1A1A1A','accent':'#C8C8C8','header':'#111111','body-text':'#BBBBBB','banner':'#444444','banner-text':'#111111','label':'#777777','value':'#EEEEEE' }
-  },
-  {
-    name: "Sunset",
-    colors: { 'sign-bg':'#12080A','accent':'#E8823A','header':'#1E0C0E','body-text':'#D4B8A8','banner':'#8B3A14','banner-text':'#FFF8F0','label':'#886655','value':'#F0E0D0' }
-  },
-];
-
-let state = JSON.parse(JSON.stringify(GUMBY_DATA));
-
-// ═══════════════════════════════════════
-// ASPECT RATIO PRESETS
-// ═══════════════════════════════════════
-const RATIO_PRESETS = [
-  { label: '24×36', w: 24, h: 36 },
-  { label: '18×24', w: 18, h: 24 },
-  { label: '16×20', w: 16, h: 20 },
-  { label: '11×14', w: 11, h: 14 },
-  { label: '12×18', w: 12, h: 18 },
-  { label: '24×24', w: 24, h: 24 },
-  { label: '36×24', w: 36, h: 24 },
-  { label: 'Custom', w: null, h: null },
-];
-
-const POSTER_W = 800; // fixed render width, always
-const BASELINE_H = 1200; // --ps = 1 at this height
-
-function buildRatioPresets() {
-  const container = document.getElementById('ratio-presets');
-  container.innerHTML = '';
-  RATIO_PRESETS.forEach((r, i) => {
-    const btn = document.createElement('button');
-    btn.id = `ratio-btn-${i}`;
-    btn.textContent = r.label;
-    btn.style.cssText = `
+        function buildRatioPresets() {
+            const container = document.getElementById('ratio-presets');
+            container.innerHTML = '';
+            RATIO_PRESETS.forEach((r, i) => {
+                const btn = document.createElement('button');
+                btn.id = `ratio-btn-${i}`;
+                btn.textContent = r.label;
+                btn.style.cssText = `
       font-family: Oswald, sans-serif; font-size: 11px; font-weight: 600;
       letter-spacing: 1px; text-transform: uppercase; padding: 7px 4px;
       background: var(--btn-secondary); border: 1px solid var(--panel-border);
       border-radius: 4px; color: var(--text-secondary); cursor: pointer;
       transition: all 0.2s;
     `;
-    btn.onmouseover = () => { if (!btn.classList.contains('active-ratio')) btn.style.borderColor = 'var(--accent)'; };
-    btn.onmouseout  = () => { if (!btn.classList.contains('active-ratio')) btn.style.borderColor = 'var(--panel-border)'; };
-    if (r.w !== null) {
-      btn.onclick = () => applyRatioPreset(i);
-    } else {
-      btn.onclick = () => {
-        document.querySelectorAll('[id^=ratio-btn-]').forEach(b => {
-          b.classList.remove('active-ratio');
-          b.style.borderColor = 'var(--panel-border)';
-          b.style.color = 'var(--text-secondary)';
-        });
-        btn.classList.add('active-ratio');
-        btn.style.borderColor = 'var(--accent)';
-        btn.style.color = 'var(--accent)';
-      };
-    }
-    container.appendChild(btn);
-  });
-}
+                btn.onmouseover = () => { if (!btn.classList.contains('active-ratio')) btn.style.borderColor = 'var(--accent)'; };
+                btn.onmouseout = () => { if (!btn.classList.contains('active-ratio')) btn.style.borderColor = 'var(--panel-border)'; };
+                if (r.w !== null) {
+                    btn.onclick = () => applyRatioPreset(i);
+                } else {
+                    btn.onclick = () => {
+                        document.querySelectorAll('[id^=ratio-btn-]').forEach(b => {
+                            b.classList.remove('active-ratio');
+                            b.style.borderColor = 'var(--panel-border)';
+                            b.style.color = 'var(--text-secondary)';
+                        });
+                        btn.classList.add('active-ratio');
+                        btn.style.borderColor = 'var(--accent)';
+                        btn.style.color = 'var(--accent)';
+                    };
+                }
+                container.appendChild(btn);
+            });
+        }
 
-function applyRatioPreset(i) {
-  const r = RATIO_PRESETS[i];
-  if (!r.w) return;
-  document.getElementById('f-ratio-w').value = r.w;
-  document.getElementById('f-ratio-h').value = r.h;
-  document.querySelectorAll('[id^=ratio-btn-]').forEach((b, j) => {
-    const active = j === i;
-    b.classList.toggle('active-ratio', active);
-    b.style.borderColor = active ? 'var(--accent)' : 'var(--panel-border)';
-    b.style.color = active ? 'var(--accent)' : 'var(--text-secondary)';
-  });
-  applyAspectRatio();
-}
+        function applyRatioPreset(i) {
+            const r = RATIO_PRESETS[i];
+            if (!r.w) return;
+            document.getElementById('f-ratio-w').value = r.w;
+            document.getElementById('f-ratio-h').value = r.h;
+            document.querySelectorAll('[id^=ratio-btn-]').forEach((b, j) => {
+                const active = j === i;
+                b.classList.toggle('active-ratio', active);
+                b.style.borderColor = active ? 'var(--accent)' : 'var(--panel-border)';
+                b.style.color = active ? 'var(--accent)' : 'var(--text-secondary)';
+            });
+            applyAspectRatio();
+        }
 
-function onRatioInput() {
-  // deselect presets, select Custom
-  document.querySelectorAll('[id^=ratio-btn-]').forEach((b, j) => {
-    const isCustom = j === RATIO_PRESETS.length - 1;
-    b.classList.toggle('active-ratio', isCustom);
-    b.style.borderColor = isCustom ? 'var(--accent)' : 'var(--panel-border)';
-    b.style.color = isCustom ? 'var(--accent)' : 'var(--text-secondary)';
-  });
-  applyAspectRatio();
-}
+        function onRatioInput() {
+            // deselect presets, select Custom
+            document.querySelectorAll('[id^=ratio-btn-]').forEach((b, j) => {
+                const isCustom = j === RATIO_PRESETS.length - 1;
+                b.classList.toggle('active-ratio', isCustom);
+                b.style.borderColor = isCustom ? 'var(--accent)' : 'var(--panel-border)';
+                b.style.color = isCustom ? 'var(--accent)' : 'var(--text-secondary)';
+            });
+            applyAspectRatio();
+        }
 
-function applyAspectRatio() {
-  const w = parseFloat(document.getElementById('f-ratio-w').value) || 24;
-  const h = parseFloat(document.getElementById('f-ratio-h').value) || 36;
-  const ratio = h / w;
-  const posterH = Math.round(POSTER_W * ratio);
-  const ps = posterH / BASELINE_H;
+        function applyAspectRatio() {
+            const w = parseFloat(document.getElementById('f-ratio-w').value) || 24;
+            const h = parseFloat(document.getElementById('f-ratio-h').value) || 36;
+            const ratio = h / w;
+            const posterH = Math.round(POSTER_W * ratio);
+            const ps = posterH / BASELINE_H;
 
-  const poster = document.getElementById('poster');
-  poster.style.height = posterH + 'px';
-  poster.style.setProperty('--ps', ps);
+            const poster = document.getElementById('poster');
+            poster.style.height = posterH + 'px';
+            poster.style.setProperty('--ps', ps);
 
-  // Update display label
-  const gcd = (a,b) => b ? gcd(b, a%b) : a;
-  const g = gcd(w, h);
-  document.getElementById('ratio-display').textContent =
-    `${w}″ × ${h}″  ·  ${w/g}:${h/g} ratio  ·  poster renders at 800 × ${posterH}px`;
+            // Update display label
+            const gcd = (a, b) => b ? gcd(b, a % b) : a;
+            const g = gcd(w, h);
+            document.getElementById('ratio-display').textContent =
+                `${w}″ × ${h}″  ·  ${w / g}:${h / g} ratio  ·  poster renders at 800 × ${posterH}px`;
 
-  scalePreview();
-}
+            scalePreview();
+        }
 
-// ═══════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════
-function init() {
-  buildThemePresets();
-  buildRatioPresets();
-  loadStateIntoFields();
-  renderSpecsEditor();
-  renderCowlEditor();
-  renderStoryEditor();
-  renderTimelineEditor();
-  update();
-  applyRatioPreset(0); // default 24x36
-  window.addEventListener('resize', scalePreview);
-}
+        // ═══════════════════════════════════════
+        // INIT
+        // ═══════════════════════════════════════
+        function init() {
+            buildThemePresets();
+            buildRatioPresets();
+            loadStateIntoFields();
+            renderSpecsEditor();
+            renderStoryEditor();
+            renderTimelineEditor();
+            setupPanelResizer();
+            update();
+            applyRatioPreset(0); // default 24x36
+            window.addEventListener('resize', scalePreview);
+        }
 
-function scalePreview() {
-  const panel = document.getElementById('preview-panel');
-  const wrapper = document.getElementById('scale-wrapper');
-  const poster = document.getElementById('poster');
-  const posterW = POSTER_W;
-  const posterH = poster.offsetHeight || BASELINE_H;
-  const availW = panel.clientWidth - 60;
-  const availH = panel.clientHeight - 60;
-  const scaleByW = availW / posterW;
-  const scaleByH = availH / posterH;
-  const scale = Math.min(1, scaleByW, scaleByH);
-  wrapper.style.transform = `scale(${scale})`;
-  wrapper.style.transformOrigin = 'top center';
-  // compensate collapsed height so panel scrolls correctly
-  const scaledH = posterH * scale;
-  wrapper.style.height = scaledH + 'px';
-  wrapper.style.width = (posterW * scale) + 'px';
-  wrapper.style.overflow = 'hidden';
-}
+        function setupPanelResizer() {
+            const resizer = document.getElementById('panel-resizer');
+            const app = document.querySelector('.app');
+            if (!resizer || !app) return;
 
-// ═══════════════════════════════════════
-// TABS
-// ═══════════════════════════════════════
-function switchTab(name) {
-  document.querySelectorAll('.tab').forEach((t,i) => {
-    const tabs = ['vehicle','specs','story','timeline','colors'];
-    t.classList.toggle('active', tabs[i] === name);
-  });
-  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-  document.getElementById('tab-' + name).classList.add('active');
-}
+            const minWidth = 280;
+            const maxWidth = 760;
 
-// ═══════════════════════════════════════
-// FIELD LOADING
-// ═══════════════════════════════════════
-function loadStateIntoFields() {
-  setVal('f-badge', state.badge);
-  setVal('f-title', state.title);
-  setVal('f-nickname', state.nickname);
-  setVal('f-subtitle', state.subtitle);
-  setVal('f-origin', state.origin);
-  setVal('f-tagline', state.tagline);
-  setVal('f-subtagline', state.subtagline);
-  setVal('f-timeline-title', state.timelineTitle);
-  loadColorsIntoFields();
-}
-function setVal(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.value = val;
-}
+            const onPointerMove = (e) => {
+                const appRect = app.getBoundingClientRect();
+                const nextWidth = Math.min(maxWidth, Math.max(minWidth, e.clientX - appRect.left));
+                document.documentElement.style.setProperty('--editor-width', `${Math.round(nextWidth)}px`);
+                scalePreview();
+            };
 
-// ═══════════════════════════════════════
-// SPECS EDITOR
-// ═══════════════════════════════════════
-function renderSpecsEditor() {
-  const list = document.getElementById('specs-list');
-  list.innerHTML = '';
-  state.specs.forEach((spec, i) => {
-    const row = document.createElement('div');
-    row.className = 'spec-editor-row';
-    row.innerHTML = `
-      <input type="text" value="${esc(spec.label)}" placeholder="Label" oninput="state.specs[${i}].label=this.value;renderPosterSpecs()" style="padding:6px 8px;font-size:12px;">
-      <input type="text" value="${esc(spec.value)}" placeholder="Value" oninput="state.specs[${i}].value=this.value;renderPosterSpecs()" style="padding:6px 8px;font-size:12px;">
-      <button class="remove-spec-btn" onclick="removeSpec(${i})" title="Remove">×</button>
+            const stopDragging = () => {
+                resizer.classList.remove('dragging');
+                document.removeEventListener('pointermove', onPointerMove);
+                document.removeEventListener('pointerup', stopDragging);
+            };
+
+            resizer.addEventListener('pointerdown', (e) => {
+                e.preventDefault();
+                resizer.classList.add('dragging');
+                document.addEventListener('pointermove', onPointerMove);
+                document.addEventListener('pointerup', stopDragging);
+            });
+        }
+
+        function scalePreview() {
+            const panel = document.getElementById('preview-panel');
+            const wrapper = document.getElementById('scale-wrapper');
+            const poster = document.getElementById('poster');
+            const posterW = POSTER_W;
+            const posterH = poster.offsetHeight || BASELINE_H;
+            const availW = panel.clientWidth - 60;
+            const availH = panel.clientHeight - 60;
+            const scaleByW = availW / posterW;
+            const scaleByH = availH / posterH;
+            const scale = Math.min(1, scaleByW, scaleByH);
+            // Scale the poster itself so wrapper sizing stays accurate.
+            poster.style.transform = `scale(${scale})`;
+            poster.style.transformOrigin = 'top center';
+            wrapper.style.height = (posterH * scale) + 'px';
+            wrapper.style.width = (posterW * scale) + 'px';
+        }
+
+        // ═══════════════════════════════════════
+        // TABS
+        // ═══════════════════════════════════════
+        function switchTab(name) {
+            document.querySelectorAll('.tab').forEach((t, i) => {
+                const tabs = ['vehicle', 'specs', 'story', 'timeline', 'colors'];
+                t.classList.toggle('active', tabs[i] === name);
+            });
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('tab-' + name).classList.add('active');
+        }
+
+        // ═══════════════════════════════════════
+        // FIELD LOADING
+        // ═══════════════════════════════════════
+        function loadStateIntoFields() {
+            setVal('f-badge', state.badge);
+            setVal('f-title', state.title);
+            setVal('f-nickname', state.nickname);
+            setVal('f-subtitle', state.subtitle);
+            setVal('f-origin', state.origin);
+            setVal('f-tagline', state.tagline);
+            setVal('f-subtagline', state.subtagline);
+            setVal('f-timeline-title', state.timelineTitle);
+            loadColorsIntoFields();
+        }
+        function setVal(id, val) {
+            const el = document.getElementById(id);
+            if (el) el.value = val;
+        }
+
+        // ═══════════════════════════════════════
+        // SPECS EDITOR
+        // ═══════════════════════════════════════
+        function renderSpecsEditor() {
+            const list = document.getElementById('spec-sections-list');
+            list.innerHTML = '';
+            state.specSections.forEach((section, sectionIndex) => {
+                const sectionWrap = document.createElement('div');
+                sectionWrap.style.cssText = 'border:1px solid var(--input-border);border-radius:6px;padding:10px;margin-bottom:10px;background:rgba(0,0,0,0.12);';
+                sectionWrap.innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr auto auto auto auto;gap:6px;align-items:center;margin-bottom:8px;">
+        <input type="text" value="${esc(section.title)}" placeholder="Section title" oninput="state.specSections[${sectionIndex}].title=this.value;renderPosterSpecs()" style="padding:7px 9px;font-size:12px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:4px;color:var(--text-primary);">
+        <button class="add-spec-btn" onclick="addSpecRow(${sectionIndex})" style="margin-top:0;padding:7px 10px;width:auto;">+ Row</button>
+        <button class="move-spec-btn" onclick="moveSpecSection(${sectionIndex}, -1)" title="Move section up">↑</button>
+        <button class="move-spec-btn" onclick="moveSpecSection(${sectionIndex}, 1)" title="Move section down">↓</button>
+        <button class="remove-spec-btn" onclick="removeSpecSection(${sectionIndex})" title="Remove section">×</button>
+      </div>
+      <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-secondary);margin-bottom:8px;">
+        <input type="checkbox" ${section.dashWhenEmpty ? 'checked' : ''} onchange="toggleSectionDashMode(${sectionIndex}, this.checked)">
+        Show em dash when value is empty
+      </label>
+      <div id="section-rows-${sectionIndex}"></div>
     `;
-    // highlight toggle
-    const labelInput = row.querySelector('input:first-of-type');
-    labelInput.style.borderColor = spec.highlight ? '#C9962A' : '';
-    row.querySelector('input:nth-of-type(2)').style.color = spec.highlight ? '#C9962A' : '';
-    row.querySelector('input:nth-of-type(2)').addEventListener('dblclick', () => {
-      state.specs[i].highlight = !state.specs[i].highlight;
-      renderSpecsEditor();
-      renderPosterSpecs();
-    });
-    list.appendChild(row);
-  });
-  const hint = document.createElement('p');
-  hint.style.cssText = 'font-size:11px;color:var(--text-secondary);margin-top:6px;';
-  hint.textContent = 'Double-click a value to toggle gold highlight';
-  list.appendChild(hint);
+                list.appendChild(sectionWrap);
 
-  // Cowl
-  const cowl = document.getElementById('cowl-list');
-  cowl.innerHTML = '';
-  state.cowl.forEach((c, i) => {
-    const row = document.createElement('div');
-    row.className = 'spec-editor-row';
-    row.innerHTML = `
-      <input type="text" value="${esc(c.label)}" placeholder="Label" oninput="state.cowl[${i}].label=this.value;renderPosterSpecs()" style="padding:6px 8px;font-size:12px;">
-      <input type="text" value="${esc(c.value)}" placeholder="Leave blank for ——" oninput="state.cowl[${i}].value=this.value;renderPosterSpecs()" style="padding:6px 8px;font-size:12px;">
-      <button class="remove-spec-btn" onclick="removeCowl(${i})" title="Remove">×</button>
-    `;
-    cowl.appendChild(row);
-  });
-}
-function renderCowlEditor() { renderSpecsEditor(); }
+                const rowsEl = sectionWrap.querySelector(`#section-rows-${sectionIndex}`);
+                section.rows.forEach((rowData, rowIndex) => {
+                    const row = document.createElement('div');
+                    row.className = 'spec-editor-row';
+                    const valuePlaceholder = section.dashWhenEmpty ? 'Leave blank for ——' : 'Value';
+                    const isHighlighted = !!rowData.highlight;
+                    row.innerHTML = `
+          <input type="text" value="${esc(rowData.label)}" placeholder="Label" oninput="state.specSections[${sectionIndex}].rows[${rowIndex}].label=this.value;renderPosterSpecs()" style="padding:6px 8px;font-size:12px;">
+          <input type="text" value="${esc(rowData.value)}" placeholder="${valuePlaceholder}" oninput="state.specSections[${sectionIndex}].rows[${rowIndex}].value=this.value;renderPosterSpecs()" style="padding:6px 8px;font-size:12px;">
+          <button class="highlight-spec-btn ${isHighlighted ? 'active' : ''}" onclick="toggleSpecHighlight(${sectionIndex}, ${rowIndex})" title="Toggle accent value color">${isHighlighted ? 'Accent' : 'Normal'}</button>
+          <button class="move-spec-btn" onclick="moveSpecRow(${sectionIndex}, ${rowIndex}, -1)" title="Move row up">↑</button>
+          <button class="move-spec-btn" onclick="moveSpecRow(${sectionIndex}, ${rowIndex}, 1)" title="Move row down">↓</button>
+          <button class="remove-spec-btn" onclick="removeSpecRow(${sectionIndex}, ${rowIndex})" title="Remove row">×</button>
+        `;
+                    const labelInput = row.querySelector('input:first-of-type');
+                    labelInput.style.borderColor = rowData.highlight ? '#C9962A' : '';
+                    const valueInput = row.querySelector('input:nth-of-type(2)');
+                    valueInput.style.color = rowData.highlight ? '#C9962A' : '';
+                    rowsEl.appendChild(row);
+                });
+            });
 
-function addSpec() {
-  state.specs.push({ label: 'Label', value: 'Value', highlight: false });
-  renderSpecsEditor();
-  renderPosterSpecs();
-}
-function removeSpec(i) {
-  state.specs.splice(i, 1);
-  renderSpecsEditor();
-  renderPosterSpecs();
-}
-function removeCowl(i) {
-  state.cowl.splice(i, 1);
-  renderSpecsEditor();
-  renderPosterSpecs();
-}
+            const hint = document.createElement('p');
+            hint.style.cssText = 'font-size:11px;color:var(--text-secondary);margin-top:6px;';
+            hint.textContent = 'Use the Normal/Accent toggle on each row to control value color';
+            list.appendChild(hint);
+        }
 
-// ═══════════════════════════════════════
-// STORY EDITOR
-// ═══════════════════════════════════════
-function renderStoryEditor() {
-  const list = document.getElementById('story-list');
-  list.innerHTML = '';
-  state.story.forEach((para, i) => {
-    const group = document.createElement('div');
-    group.style.cssText = 'display:grid;grid-template-columns:1fr 28px;gap:6px;margin-bottom:8px;';
-    group.innerHTML = `
+        function addSpecSection() {
+            state.specSections.push({
+                title: 'New Section',
+                dashWhenEmpty: false,
+                rows: [{ label: 'Label', value: 'Value', highlight: false }],
+            });
+            renderSpecsEditor();
+            renderPosterSpecs();
+        }
+
+        function removeSpecSection(sectionIndex) {
+            if (state.specSections.length <= 1) {
+                alert('At least one section is required.');
+                return;
+            }
+            state.specSections.splice(sectionIndex, 1);
+            renderSpecsEditor();
+            renderPosterSpecs();
+        }
+
+        function moveSpecSection(sectionIndex, direction) {
+            const targetIndex = sectionIndex + direction;
+            if (targetIndex < 0 || targetIndex >= state.specSections.length) return;
+            const [moved] = state.specSections.splice(sectionIndex, 1);
+            state.specSections.splice(targetIndex, 0, moved);
+            renderSpecsEditor();
+            renderPosterSpecs();
+        }
+
+        function toggleSectionDashMode(sectionIndex, checked) {
+            state.specSections[sectionIndex].dashWhenEmpty = checked;
+            renderPosterSpecs();
+            renderSpecsEditor();
+        }
+
+        function addSpecRow(sectionIndex) {
+            state.specSections[sectionIndex].rows.push({ label: 'Label', value: 'Value', highlight: false });
+            renderSpecsEditor();
+            renderPosterSpecs();
+        }
+
+        function removeSpecRow(sectionIndex, rowIndex) {
+            state.specSections[sectionIndex].rows.splice(rowIndex, 1);
+            renderSpecsEditor();
+            renderPosterSpecs();
+        }
+
+        function toggleSpecHighlight(sectionIndex, rowIndex) {
+            const row = state.specSections[sectionIndex].rows[rowIndex];
+            row.highlight = !row.highlight;
+            renderSpecsEditor();
+            renderPosterSpecs();
+        }
+
+        function moveSpecRow(sectionIndex, rowIndex, direction) {
+            const rows = state.specSections[sectionIndex].rows;
+            const targetIndex = rowIndex + direction;
+            if (targetIndex < 0 || targetIndex >= rows.length) return;
+            const [moved] = rows.splice(rowIndex, 1);
+            rows.splice(targetIndex, 0, moved);
+            renderSpecsEditor();
+            renderPosterSpecs();
+        }
+
+        // ═══════════════════════════════════════
+        // STORY EDITOR
+        // ═══════════════════════════════════════
+        function renderStoryEditor() {
+            const list = document.getElementById('story-list');
+            list.innerHTML = '';
+            state.story.forEach((para, i) => {
+                const group = document.createElement('div');
+                group.style.cssText = 'display:grid;grid-template-columns:1fr 28px;gap:6px;margin-bottom:8px;';
+                group.innerHTML = `
       <textarea oninput="state.story[${i}]=this.value;renderPosterStory()" style="padding:8px;font-size:12px;min-height:70px;">${esc(para)}</textarea>
       <button class="remove-spec-btn" onclick="removeStoryPara(${i})" title="Remove" style="align-self:start;margin-top:0;">×</button>
     `;
-    list.appendChild(group);
-  });
-}
-function addStoryPara() {
-  state.story.push('New paragraph. Use **bold** and _italic_ for emphasis.');
-  renderStoryEditor();
-  renderPosterStory();
-}
-function removeStoryPara(i) {
-  state.story.splice(i, 1);
-  renderStoryEditor();
-  renderPosterStory();
-}
+                list.appendChild(group);
+            });
+        }
+        function addStoryPara() {
+            state.story.push('New paragraph. Use **bold**, _italic_, and ==accent== for emphasis.');
+            renderStoryEditor();
+            renderPosterStory();
+        }
+        function removeStoryPara(i) {
+            state.story.splice(i, 1);
+            renderStoryEditor();
+            renderPosterStory();
+        }
 
-// ═══════════════════════════════════════
-// TIMELINE EDITOR
-// ═══════════════════════════════════════
-function renderTimelineEditor() {
-  const list = document.getElementById('timeline-list');
-  list.innerHTML = '';
-  state.timeline.forEach((ev, i) => {
-    const row = document.createElement('div');
-    row.className = 'timeline-editor-row';
-    row.innerHTML = `
+        // ═══════════════════════════════════════
+        // TIMELINE EDITOR
+        // ═══════════════════════════════════════
+        function renderTimelineEditor() {
+            const list = document.getElementById('timeline-list');
+            list.innerHTML = '';
+            state.timeline.forEach((ev, i) => {
+                const row = document.createElement('div');
+                row.className = 'timeline-editor-row';
+                row.innerHTML = `
       <input type="text" value="${esc(ev.year)}" placeholder="Year" oninput="state.timeline[${i}].year=this.value;renderPosterTimeline()" style="padding:6px 8px;font-size:12px;">
       <textarea oninput="state.timeline[${i}].desc=this.value;renderPosterTimeline()" style="padding:6px 8px;font-size:12px;min-height:46px;resize:none;">${esc(ev.desc)}</textarea>
       <button class="remove-spec-btn" onclick="removeTimelineEvent(${i})" title="Remove">×</button>
     `;
-    list.appendChild(row);
-  });
-}
-function addTimelineEvent() {
-  state.timeline.push({ year: '20XX', desc: 'Event\nDescription' });
-  renderTimelineEditor();
-  renderPosterTimeline();
-}
-function removeTimelineEvent(i) {
-  state.timeline.splice(i, 1);
-  renderTimelineEditor();
-  renderPosterTimeline();
-}
+                list.appendChild(row);
+            });
+        }
+        function addTimelineEvent() {
+            state.timeline.push({ year: '20XX', desc: 'Event\nDescription' });
+            renderTimelineEditor();
+            renderPosterTimeline();
+        }
+        function removeTimelineEvent(i) {
+            state.timeline.splice(i, 1);
+            renderTimelineEditor();
+            renderPosterTimeline();
+        }
 
-// ═══════════════════════════════════════
-// COLORS
-// ═══════════════════════════════════════
-function buildThemePresets() {
-  const container = document.getElementById('theme-presets');
-  THEMES.forEach((theme, i) => {
-    const div = document.createElement('div');
-    div.className = 'theme-preset';
-    div.innerHTML = `
+        // ═══════════════════════════════════════
+        // COLORS
+        // ═══════════════════════════════════════
+        function buildThemePresets() {
+            const container = document.getElementById('theme-presets');
+            THEMES.forEach((theme, i) => {
+                const div = document.createElement('div');
+                div.className = 'theme-preset';
+                const previewTitleColor = getReadableTextColor(theme.colors['header']);
+                div.innerHTML = `
       <div class="theme-preview">
         <div class="theme-preview-header" style="background:${theme.colors['header']};border-bottom:3px solid ${theme.colors['accent']};display:flex;align-items:center;justify-content:center;">
-          <span style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:${theme.colors['accent']};letter-spacing:2px;">TITLE</span>
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:${previewTitleColor};letter-spacing:2px;">TITLE</span>
         </div>
         <div class="theme-preview-body" style="background:${theme.colors['sign-bg']};"></div>
       </div>
       <div class="theme-preset-name">${theme.name}</div>
     `;
-    div.onclick = () => applyTheme(i, div);
-    container.appendChild(div);
-  });
-}
+                div.onclick = () => applyTheme(i, div);
+                container.appendChild(div);
+            });
+        }
 
-function applyTheme(i, el) {
-  document.querySelectorAll('.theme-preset').forEach(p => p.classList.remove('selected'));
-  el.classList.add('selected');
-  state.colors = { ...THEMES[i].colors };
-  loadColorsIntoFields();
-  applyColorsToPage();
-}
+        function applyTheme(i, el) {
+            document.querySelectorAll('.theme-preset').forEach(p => p.classList.remove('selected'));
+            el.classList.add('selected');
+            state.colors = { ...THEMES[i].colors };
+            loadColorsIntoFields();
+            applyColorsToPage();
+        }
 
-function loadColorsIntoFields() {
-  Object.entries(state.colors).forEach(([key, val]) => {
-    const picker = document.getElementById(`c-${key}`);
-    const hex = document.getElementById(`c-${key}-hex`);
-    if (picker) picker.value = val;
-    if (hex) hex.value = val.toUpperCase();
-  });
-  applyColorsToPage();
-}
+        function loadColorsIntoFields() {
+            Object.entries(state.colors).forEach(([key, val]) => {
+                const picker = document.getElementById(`c-${key}`);
+                const hex = document.getElementById(`c-${key}-hex`);
+                if (picker) picker.value = val;
+                if (hex) hex.value = val.toUpperCase();
+            });
+            applyColorsToPage();
+        }
 
-function syncColor(key) {
-  const picker = document.getElementById(`c-${key}`);
-  const hex = document.getElementById(`c-${key}-hex`);
-  if (picker && hex) {
-    hex.value = picker.value.toUpperCase();
-    state.colors[key] = picker.value;
-    applyColorsToPage();
-  }
-}
+        function syncColor(key) {
+            const picker = document.getElementById(`c-${key}`);
+            const hex = document.getElementById(`c-${key}-hex`);
+            if (picker && hex) {
+                hex.value = picker.value.toUpperCase();
+                state.colors[key] = picker.value;
+                applyColorsToPage();
+            }
+        }
 
-function syncColorFromHex(key) {
-  const hex = document.getElementById(`c-${key}-hex`);
-  const picker = document.getElementById(`c-${key}`);
-  if (hex && picker && /^#[0-9A-Fa-f]{6}$/.test(hex.value)) {
-    picker.value = hex.value;
-    state.colors[key] = hex.value;
-    applyColorsToPage();
-  }
-}
+        function syncColorFromHex(key) {
+            const hex = document.getElementById(`c-${key}-hex`);
+            const picker = document.getElementById(`c-${key}`);
+            if (hex && picker && /^#[0-9A-Fa-f]{6}$/.test(hex.value)) {
+                picker.value = hex.value;
+                state.colors[key] = hex.value;
+                applyColorsToPage();
+            }
+        }
 
-function applyColorsToPage() {
-  const poster = document.getElementById('poster');
-  const c = state.colors;
-  const headerDark = darken(c['header'], 15);
-  const bannerLight = lighten(c['banner'], 15);
+        function applyColorsToPage() {
+            const poster = document.getElementById('poster');
+            const c = state.colors;
+            const bannerLight = lighten(c['banner'], 15);
+            const titleText = getReadableTextColor(c['header']);
+            const headerMetaText = pickReadableText(c['header'], c['accent'], c['value']);
+            const sectionTitle = pickReadableText(c['sign-bg'], c['accent'], c['value']);
+            const highlightText = pickReadableText(c['sign-bg'], c['accent'], c['value']);
+            const emphasisText = pickReadableText(c['sign-bg'], c['accent'], c['value']);
+            const timelineYearText = pickReadableText(c['sign-bg'], c['accent'], c['value']);
+            const footerText = pickReadableText(c['header'], c['accent'], c['value']);
 
-  poster.style.setProperty('--p-sign-bg',      c['sign-bg']);
-  poster.style.setProperty('--p-border',        c['banner']);
-  poster.style.setProperty('--p-corner',        c['accent']);
-  poster.style.setProperty('--p-header1',       c['header']);
-  poster.style.setProperty('--p-header2',       lighten(c['header'], 10));
-  poster.style.setProperty('--p-accent',        c['accent']);
-  poster.style.setProperty('--p-banner1',       c['banner']);
-  poster.style.setProperty('--p-banner2',       bannerLight);
-  poster.style.setProperty('--p-banner-text',   c['banner-text']);
-  poster.style.setProperty('--p-label',         c['label']);
-  poster.style.setProperty('--p-value',         c['value']);
-  poster.style.setProperty('--p-story',         c['body-text']);
-  poster.style.setProperty('--p-story-strong',  c['value']);
-  poster.style.setProperty('--p-spec-border',   lighten(c['sign-bg'], 12));
-  poster.style.setProperty('--p-blank',         lighten(c['sign-bg'], 25));
-  poster.style.setProperty('--p-timeline-bg',   c['sign-bg']);
-  poster.style.setProperty('--p-timeline-border', lighten(c['sign-bg'], 15));
-}
+            poster.style.setProperty('--p-sign-bg', c['sign-bg']);
+            poster.style.setProperty('--p-border', c['banner']);
+            poster.style.setProperty('--p-corner', c['accent']);
+            poster.style.setProperty('--p-header1', c['header']);
+            poster.style.setProperty('--p-header2', lighten(c['header'], 10));
+            poster.style.setProperty('--p-accent', c['accent']);
+            poster.style.setProperty('--p-title-text', titleText);
+            poster.style.setProperty('--p-title-shadow', darken(c['header'], 35));
+            poster.style.setProperty('--p-header-meta-text', headerMetaText);
+            poster.style.setProperty('--p-section-title', sectionTitle);
+            poster.style.setProperty('--p-highlight', highlightText);
+            poster.style.setProperty('--p-emphasis', emphasisText);
+            poster.style.setProperty('--p-timeline-year-text', timelineYearText);
+            poster.style.setProperty('--p-footer-text', footerText);
+            poster.style.setProperty('--p-banner1', c['banner']);
+            poster.style.setProperty('--p-banner2', bannerLight);
+            poster.style.setProperty('--p-banner-text', c['banner-text']);
+            poster.style.setProperty('--p-label', c['label']);
+            poster.style.setProperty('--p-value', c['value']);
+            poster.style.setProperty('--p-story', c['body-text']);
+            poster.style.setProperty('--p-story-strong', c['value']);
+            poster.style.setProperty('--p-spec-border', c['accent']);
+            poster.style.setProperty('--p-blank', lighten(c['sign-bg'], 25));
+            poster.style.setProperty('--p-timeline-bg', c['sign-bg']);
+            poster.style.setProperty('--p-timeline-border', lighten(c['sign-bg'], 15));
+        }
 
-// color helpers
-function hexToRgb(hex) {
-  const r = parseInt(hex.slice(1,3),16);
-  const g = parseInt(hex.slice(3,5),16);
-  const b = parseInt(hex.slice(5,7),16);
-  return [r,g,b];
-}
-function rgbToHex(r,g,b) {
-  return '#' + [r,g,b].map(v => Math.min(255,Math.max(0,Math.round(v))).toString(16).padStart(2,'0')).join('');
-}
-function lighten(hex, amt) {
-  try { const [r,g,b] = hexToRgb(hex); return rgbToHex(r+amt,g+amt,b+amt); } catch(e) { return hex; }
-}
-function darken(hex, amt) {
-  try { const [r,g,b] = hexToRgb(hex); return rgbToHex(r-amt,g-amt,b-amt); } catch(e) { return hex; }
-}
+        // color helpers
+        function hexToRgb(hex) {
+            const r = parseInt(hex.slice(1, 3), 16);
+            const g = parseInt(hex.slice(3, 5), 16);
+            const b = parseInt(hex.slice(5, 7), 16);
+            return [r, g, b];
+        }
+        function rgbToHex(r, g, b) {
+            return '#' + [r, g, b].map(v => Math.min(255, Math.max(0, Math.round(v))).toString(16).padStart(2, '0')).join('');
+        }
+        function getReadableTextColor(bgHex, dark = '#111111', light = '#FFFFFF') {
+            try {
+                const [r, g, b] = hexToRgb(bgHex).map(v => v / 255);
+                const linear = [r, g, b].map(v => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+                const luminance = (0.2126 * linear[0]) + (0.7152 * linear[1]) + (0.0722 * linear[2]);
+                return luminance > 0.43 ? dark : light;
+            } catch (e) {
+                return light;
+            }
+        }
+        function relativeLuminance(hex) {
+            const [r, g, b] = hexToRgb(hex).map(v => v / 255);
+            const linear = [r, g, b].map(v => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+            return (0.2126 * linear[0]) + (0.7152 * linear[1]) + (0.0722 * linear[2]);
+        }
+        function contrastRatio(fgHex, bgHex) {
+            try {
+                const l1 = relativeLuminance(fgHex);
+                const l2 = relativeLuminance(bgHex);
+                const lighter = Math.max(l1, l2);
+                const darker = Math.min(l1, l2);
+                return (lighter + 0.05) / (darker + 0.05);
+            } catch (e) {
+                return 1;
+            }
+        }
+        function pickReadableText(bgHex, preferredHex, fallbackHex) {
+            const minContrast = 4.2;
+            if (contrastRatio(preferredHex, bgHex) >= minContrast) return preferredHex;
+            if (contrastRatio(fallbackHex, bgHex) >= minContrast) return fallbackHex;
+            return getReadableTextColor(bgHex);
+        }
+        function lighten(hex, amt) {
+            try { const [r, g, b] = hexToRgb(hex); return rgbToHex(r + amt, g + amt, b + amt); } catch (e) { return hex; }
+        }
+        function darken(hex, amt) {
+            try { const [r, g, b] = hexToRgb(hex); return rgbToHex(r - amt, g - amt, b - amt); } catch (e) { return hex; }
+        }
 
-// ═══════════════════════════════════════
-// POSTER RENDER
-// ═══════════════════════════════════════
-function update() {
-  state.badge        = getVal('f-badge');
-  state.title        = getVal('f-title');
-  state.nickname     = getVal('f-nickname');
-  state.subtitle     = getVal('f-subtitle');
-  state.origin       = getVal('f-origin');
-  state.tagline      = getVal('f-tagline');
-  state.subtagline   = getVal('f-subtagline');
-  state.timelineTitle= getVal('f-timeline-title');
+        // ═══════════════════════════════════════
+        // POSTER RENDER
+        // ═══════════════════════════════════════
+        function update() {
+            state.badge = getVal('f-badge');
+            state.title = getVal('f-title');
+            state.nickname = getVal('f-nickname');
+            state.subtitle = getVal('f-subtitle');
+            state.origin = getVal('f-origin');
+            state.tagline = getVal('f-tagline');
+            state.subtagline = getVal('f-subtagline');
+            state.timelineTitle = getVal('f-timeline-title');
 
-  setText('p-badge',     state.badge);
-  setText('p-title',     state.title);
-  setText('p-nickname',  state.nickname ? `" ${state.nickname} "` : '');
-  setText('p-subtitle',  state.subtitle);
-  setText('p-origin',    state.origin);
-  setText('p-tagline',   state.tagline);
-  setText('p-subtagline',state.subtagline);
-  setText('p-timeline-title', state.timelineTitle);
+            setText('p-badge', state.badge);
+            setText('p-title', state.title);
+            setText('p-nickname', state.nickname ? `" ${state.nickname} "` : '');
+            setText('p-subtitle', state.subtitle);
+            setText('p-origin', state.origin);
+            setText('p-tagline', state.tagline);
+            setText('p-subtagline', state.subtagline);
+            setText('p-timeline-title', state.timelineTitle);
 
-  renderPosterSpecs();
-  renderPosterStory();
-  renderPosterTimeline();
-  applyColorsToPage();
-}
+            renderPosterSpecs();
+            renderPosterStory();
+            renderPosterTimeline();
+            applyColorsToPage();
+        }
 
-function getVal(id) {
-  const el = document.getElementById(id);
-  return el ? el.value : '';
-}
-function setText(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = val;
-}
+        function getVal(id) {
+            const el = document.getElementById(id);
+            return el ? el.value : '';
+        }
+        function setText(id, val) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = val;
+        }
 
-function renderPosterSpecs() {
-  const container = document.getElementById('p-specs');
-  container.innerHTML = state.specs.map(s => `
-    <div class="p-spec-row">
-      <span class="p-spec-label">${esc(s.label)}</span>
-      <span class="p-spec-value ${s.highlight ? 'highlight' : ''}">${esc(s.value)}</span>
-    </div>
-  `).join('');
-
-  const cowlSection = document.getElementById('p-cowl-section');
-  const hasCowl = state.cowl.length > 0;
-  cowlSection.innerHTML = hasCowl ? `
-    <div class="p-col-title" style="margin-top:10px;">Cowl Tag</div>
-    ${state.cowl.map(c => `
+        function renderPosterSpecs() {
+            const container = document.getElementById('p-specs');
+            container.innerHTML = state.specSections.map((section, sectionIndex) => `
+    <div class="p-col-title" ${sectionIndex > 0 ? 'style="margin-top:10px;"' : ''}>${esc(section.title || 'Section')}</div>
+    ${(section.rows || []).map(row => {
+                const rawValue = String(row.value || '').trim();
+                const displayValue = (section.dashWhenEmpty && !rawValue) ? '——————' : esc(rawValue);
+                const blankClass = (!rawValue && section.dashWhenEmpty) ? 'blank' : '';
+                const highlightClass = row.highlight ? 'highlight' : '';
+                return `
       <div class="p-spec-row">
-        <span class="p-spec-label">${esc(c.label)}</span>
-        <span class="p-spec-value ${c.value ? '' : 'blank'}">${c.value ? esc(c.value) : '——————'}</span>
+        <span class="p-spec-label">${esc(row.label)}</span>
+        <span class="p-spec-value ${highlightClass} ${blankClass}">${displayValue}</span>
       </div>
-    `).join('')}
-  ` : '';
-}
+    `;
+            }).join('')}
+  `).join('');
+        }
 
-function renderPosterStory() {
-  const container = document.getElementById('p-story');
-  container.innerHTML = state.story.map(p => `<p>${parseMarkdown(p)}</p>`).join('');
-}
+        function renderPosterStory() {
+            const container = document.getElementById('p-story');
+            container.innerHTML = state.story.map(p => `<p>${parseMarkdown(p)}</p>`).join('');
+        }
 
-function renderPosterTimeline() {
-  const container = document.getElementById('p-timeline');
-  container.innerHTML = state.timeline.map(ev => `
+        function renderPosterTimeline() {
+            const container = document.getElementById('p-timeline');
+            container.innerHTML = state.timeline.map(ev => `
     <div class="p-timeline-item">
       <div class="p-timeline-dot"></div>
-      <div>
+      <div class="p-timeline-meta">
         <div class="p-timeline-year">${esc(ev.year)}</div>
-        <div class="p-timeline-desc">${esc(ev.desc).replace(/\n/g,'<br>')}</div>
+        <div class="p-timeline-desc">${esc(ev.desc).replace(/\n/g, '<br>')}</div>
       </div>
     </div>
   `).join('');
-}
+        }
 
-// Simple markdown: **bold** and _italic_
-function parseMarkdown(text) {
-  return esc(text)
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/_(.*?)_/g, '<em>$1</em>');
-}
+        // Simple markdown: **bold**, _italic_, and ==accent==
+        function parseMarkdown(text) {
+            return esc(text)
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/_(.*?)_/g, '<em>$1</em>')
+                .replace(/==(.*?)==/g, '<span class="accent-mark">$1</span>');
+        }
 
-function esc(str) {
-  return String(str || '')
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;');
-}
+        function esc(str) {
+            return String(str || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
 
-// ═══════════════════════════════════════
-// DOWNLOAD
-// ═══════════════════════════════════════
-async function downloadPoster() {
-  const overlay = document.getElementById('download-overlay');
-  const btn = document.getElementById('downloadBtn');
-  overlay.classList.add('active');
-  btn.disabled = true;
+        // ═══════════════════════════════════════
+        // DOWNLOAD
+        // ═══════════════════════════════════════
+        async function downloadPoster() {
+            const overlay = document.getElementById('download-overlay');
+            const btn = document.getElementById('downloadBtn');
+            overlay.classList.add('active');
+            btn.disabled = true;
 
-  // Temporarily reset scale for capture
-  const wrapper = document.getElementById('scale-wrapper');
-  const prevTransform = wrapper.style.transform;
-  const prevH = wrapper.style.height;
-  const prevW = wrapper.style.width;
-  wrapper.style.transform = 'scale(1)';
-  wrapper.style.height = 'auto';
-  wrapper.style.width = 'auto';
+            // Temporarily reset scale for capture
+            const wrapper = document.getElementById('scale-wrapper');
+            const poster = document.getElementById('poster');
+            const prevTransform = poster.style.transform;
+            const prevH = wrapper.style.height;
+            const prevW = wrapper.style.width;
+            poster.style.transform = 'scale(1)';
+            wrapper.style.height = 'auto';
+            wrapper.style.width = 'auto';
 
-  await new Promise(r => setTimeout(r, 200));
+            await new Promise(r => setTimeout(r, 200));
 
-  try {
-    const poster = document.getElementById('poster');
-    const canvas = await html2canvas(poster, {
-      scale: 3,
-      useCORS: true,
-      allowTaint: true,
-      backgroundColor: null,
-      logging: false,
-    });
+            try {
+                const canvas = await html2canvas(poster, {
+                    scale: 3,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: null,
+                    logging: false,
+                });
 
-    const link = document.createElement('a');
-    const rw = document.getElementById('f-ratio-w').value || '24';
-    const rh = document.getElementById('f-ratio-h').value || '36';
-    const name = (state.nickname || state.title || 'poster').replace(/\s+/g,'-').toLowerCase();
-    link.download = `${name}-${rw}x${rh}-poster.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-  } catch(e) {
-    alert('Download failed. Try right-clicking the poster and saving the image.');
-    console.error(e);
-  }
+                const link = document.createElement('a');
+                const rw = document.getElementById('f-ratio-w').value || '24';
+                const rh = document.getElementById('f-ratio-h').value || '36';
+                const name = (state.nickname || state.title || 'poster').replace(/\s+/g, '-').toLowerCase();
+                link.download = `${name}-${rw}x${rh}-poster.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            } catch (e) {
+                alert('Download failed. Try right-clicking the poster and saving the image.');
+                console.error(e);
+            }
 
-  wrapper.style.transform = prevTransform;
-  wrapper.style.height = prevH;
-  wrapper.style.width = prevW;
-  overlay.classList.remove('active');
-  btn.disabled = false;
-}
+            poster.style.transform = prevTransform;
+            wrapper.style.height = prevH;
+            wrapper.style.width = prevW;
+            overlay.classList.remove('active');
+            btn.disabled = false;
+        }
 
-// ═══════════════════════════════════════
-// RESET
-// ═══════════════════════════════════════
-function resetToGumby() {
-  if (!confirm('Reset all content to Gumby defaults?')) return;
-  state = JSON.parse(JSON.stringify(GUMBY_DATA));
-  loadStateIntoFields();
-  renderSpecsEditor();
-  renderStoryEditor();
-  renderTimelineEditor();
-  update();
-}
+        // ═══════════════════════════════════════
+        // RESET
+        // ═══════════════════════════════════════
+        function resetToGumby() {
+            if (!confirm('Reset all content to Gumby defaults?')) return;
+            state = JSON.parse(JSON.stringify(GUMBY_DATA));
+            loadStateIntoFields();
+            renderSpecsEditor();
+            renderStoryEditor();
+            renderTimelineEditor();
+            update();
+        }
 
-init();
-</script>
+        init();
+    </script>
 </body>
+
 </html>
