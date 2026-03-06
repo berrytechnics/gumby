@@ -319,12 +319,16 @@ html, body {
 }
 
 /* ═══════════════════════════════════════
-   THE POSTER
+   THE POSTER  (all sizes via --ps scale factor)
+   Baseline: 800 x 1200  →  --ps: 1
+   Every font/padding multiplied by --ps
 ═══════════════════════════════════════ */
 #poster {
+  --ps: 1; /* set by JS: posterHeight / 1200 */
   width: 800px;
+  /* height set by JS */
   background: var(--p-sign-bg, #0d0d0d);
-  border: 3px solid var(--p-border, #8B6914);
+  border: calc(3px * var(--ps)) solid var(--p-border, #8B6914);
   position: relative;
   overflow: hidden;
   box-shadow: 0 0 60px rgba(139,105,20,0.2), 0 20px 60px rgba(0,0,0,0.6);
@@ -336,15 +340,23 @@ html, body {
 #poster::before, #poster::after {
   content: '';
   position: absolute;
-  width: 50px; height: 50px;
+  width: calc(50px * var(--ps)); height: calc(50px * var(--ps));
   border-color: var(--p-corner, #C9962A);
   border-style: solid;
   z-index: 10;
 }
-#poster::before { top: 8px; left: 8px; border-width: 2px 0 0 2px; }
-#poster::after  { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
-.p-corner-br { position: absolute; top: 8px; right: 8px; width: 50px; height: 50px; border-top: 2px solid var(--p-corner, #C9962A); border-right: 2px solid var(--p-corner, #C9962A); z-index: 10; }
-.p-corner-tl { position: absolute; bottom: 8px; left: 8px; width: 50px; height: 50px; border-bottom: 2px solid var(--p-corner, #C9962A); border-left: 2px solid var(--p-corner, #C9962A); z-index: 10; }
+#poster::before { top: calc(8px * var(--ps)); left: calc(8px * var(--ps)); border-width: 2px 0 0 2px; }
+#poster::after  { bottom: calc(8px * var(--ps)); right: calc(8px * var(--ps)); border-width: 0 2px 2px 0; }
+.p-corner-br {
+  position: absolute; top: calc(8px * var(--ps)); right: calc(8px * var(--ps));
+  width: calc(50px * var(--ps)); height: calc(50px * var(--ps));
+  border-top: 2px solid var(--p-corner, #C9962A); border-right: 2px solid var(--p-corner, #C9962A); z-index: 10;
+}
+.p-corner-tl {
+  position: absolute; bottom: calc(8px * var(--ps)); left: calc(8px * var(--ps));
+  width: calc(50px * var(--ps)); height: calc(50px * var(--ps));
+  border-bottom: 2px solid var(--p-corner, #C9962A); border-left: 2px solid var(--p-corner, #C9962A); z-index: 10;
+}
 
 .p-texture {
   position: absolute; inset: 0;
@@ -355,92 +367,97 @@ html, body {
 /* Poster Header */
 .p-header {
   background: linear-gradient(135deg, var(--p-header1, #1C1C1C) 0%, var(--p-header2, #2A2A2A) 50%, var(--p-header1, #1C1C1C) 100%);
-  border-bottom: 3px solid var(--p-border, #8B6914);
-  padding: 16px 50px 12px;
+  border-bottom: calc(3px * var(--ps)) solid var(--p-border, #8B6914);
+  padding: calc(16px * var(--ps)) calc(50px * var(--ps)) calc(12px * var(--ps));
   text-align: center;
+  flex-shrink: 0;
 }
 .p-year-badge {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 14px;
-  letter-spacing: 7px;
+  font-size: calc(14px * var(--ps));
+  letter-spacing: calc(7px * var(--ps));
   color: var(--p-accent, #C9962A);
-  margin-bottom: 4px;
+  margin-bottom: calc(4px * var(--ps));
 }
 .p-main-title {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 70px;
+  font-size: calc(70px * var(--ps));
   line-height: 0.9;
   color: #FFF;
-  letter-spacing: 4px;
-  text-shadow: 3px 3px 0px var(--p-border, #8B6914), 4px 4px 16px rgba(0,0,0,0.4);
+  letter-spacing: calc(4px * var(--ps));
+  text-shadow: calc(3px * var(--ps)) calc(3px * var(--ps)) 0px var(--p-border, #8B6914), calc(4px * var(--ps)) calc(4px * var(--ps)) calc(16px * var(--ps)) rgba(0,0,0,0.4);
 }
 .p-nickname {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 22px;
-  letter-spacing: 10px;
+  font-size: calc(22px * var(--ps));
+  letter-spacing: calc(10px * var(--ps));
   color: var(--p-accent, #C9962A);
-  margin-top: 2px;
+  margin-top: calc(2px * var(--ps));
 }
 .p-subtitle {
   font-family: 'Oswald', sans-serif;
-  font-size: 14px;
+  font-size: calc(14px * var(--ps));
   font-weight: 400;
   color: var(--p-accent, #C9962A);
-  letter-spacing: 5px;
-  margin-top: 4px;
+  letter-spacing: calc(5px * var(--ps));
+  margin-top: calc(4px * var(--ps));
 }
 
 /* Origin Banner */
 .p-origin {
   background: linear-gradient(90deg, var(--p-banner1, #8B6914), var(--p-banner2, #C9962A), var(--p-banner1, #8B6914));
-  padding: 8px 50px;
+  padding: calc(8px * var(--ps)) calc(50px * var(--ps));
   text-align: center;
-  border-bottom: 2px solid var(--p-border, #8B6914);
+  border-bottom: calc(2px * var(--ps)) solid var(--p-border, #8B6914);
+  flex-shrink: 0;
 }
 .p-origin p {
   font-family: 'Oswald', sans-serif;
-  font-size: 13px;
+  font-size: calc(13px * var(--ps));
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: calc(3px * var(--ps));
   color: var(--p-banner-text, #0d0d0d);
   text-transform: uppercase;
 }
 
 /* Content Grid */
 .p-content {
-  padding: 16px 44px;
+  padding: calc(14px * var(--ps)) calc(44px * var(--ps));
   display: grid;
   grid-template-columns: 1fr 1px 1fr;
   gap: 0;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 .p-col-divider {
   background: linear-gradient(to bottom, transparent, var(--p-border, #8B6914), transparent);
-  margin: 8px 0;
+  margin: calc(8px * var(--ps)) 0;
 }
-.p-specs-col { padding-right: 26px; }
-.p-story-col  { padding-left: 26px; }
+.p-specs-col { padding-right: calc(26px * var(--ps)); overflow: hidden; }
+.p-story-col  { padding-left: calc(26px * var(--ps)); overflow: hidden; }
 
 .p-col-title {
   font-family: 'Oswald', sans-serif;
-  font-size: 10px;
+  font-size: calc(10px * var(--ps));
   font-weight: 600;
-  letter-spacing: 4px;
+  letter-spacing: calc(4px * var(--ps));
   color: var(--p-accent, #C9962A);
   text-transform: uppercase;
-  margin-bottom: 8px;
-  padding-bottom: 5px;
+  margin-bottom: calc(6px * var(--ps));
+  padding-bottom: calc(4px * var(--ps));
   border-bottom: 1px solid var(--p-border, #8B6914);
 }
 .p-spec-row {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  padding: 3px 0;
+  padding: calc(3px * var(--ps)) 0;
   border-bottom: 1px solid var(--p-spec-border, #1f1f1f);
 }
 .p-spec-label {
   font-family: 'Oswald', sans-serif;
-  font-size: 10px;
+  font-size: calc(10px * var(--ps));
   font-weight: 400;
   color: var(--p-label, #888);
   letter-spacing: 1px;
@@ -448,7 +465,7 @@ html, body {
 }
 .p-spec-value {
   font-family: 'Oswald', sans-serif;
-  font-size: 10px;
+  font-size: calc(10px * var(--ps));
   font-weight: 600;
   color: var(--p-value, #E8E8E8);
   text-align: right;
@@ -459,63 +476,64 @@ html, body {
 
 .p-story-text {
   font-family: 'Crimson Pro', serif;
-  font-size: 13.5px;
+  font-size: calc(13.5px * var(--ps));
   line-height: 1.6;
   color: var(--p-story, #CCCCCC);
 }
-.p-story-text p { margin-bottom: 7px; }
+.p-story-text p { margin-bottom: calc(7px * var(--ps)); }
 .p-story-text p:last-child { margin-bottom: 0; }
 .p-story-text strong { color: var(--p-story-strong, #E8E8E8); font-weight: 600; }
 .p-story-text em { color: var(--p-accent, #C9962A); font-style: italic; }
 
 /* Timeline */
 .p-timeline-section {
-  padding: 10px 44px;
+  padding: calc(10px * var(--ps)) calc(44px * var(--ps));
   border-top: 1px solid var(--p-timeline-border, #222);
   background: var(--p-timeline-bg, transparent);
+  flex-shrink: 0;
 }
 .p-timeline-title {
   font-family: 'Oswald', sans-serif;
-  font-size: 10px;
+  font-size: calc(10px * var(--ps));
   font-weight: 600;
-  letter-spacing: 4px;
+  letter-spacing: calc(4px * var(--ps));
   color: var(--p-accent, #C9962A);
   text-transform: uppercase;
-  margin-bottom: 10px;
+  margin-bottom: calc(10px * var(--ps));
   text-align: center;
 }
 .p-timeline {
   display: flex;
   justify-content: space-between;
   position: relative;
-  padding: 0 10px;
+  padding: 0 calc(10px * var(--ps));
 }
 .p-timeline::before {
   content: '';
   position: absolute;
-  top: 9px; left: 30px; right: 30px;
+  top: calc(9px * var(--ps)); left: calc(30px * var(--ps)); right: calc(30px * var(--ps));
   height: 1px;
   background: linear-gradient(to right, var(--p-border, #8B6914), var(--p-accent, #C9962A), var(--p-border, #8B6914));
 }
 .p-timeline-item {
   display: flex; flex-direction: column;
-  align-items: center; gap: 6px; flex: 1;
+  align-items: center; gap: calc(6px * var(--ps)); flex: 1;
 }
 .p-timeline-dot {
-  width: 18px; height: 18px;
+  width: calc(18px * var(--ps)); height: calc(18px * var(--ps));
   background: var(--p-accent, #C9962A);
   transform: rotate(45deg);
   flex-shrink: 0;
 }
 .p-timeline-year {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 20px;
+  font-size: calc(20px * var(--ps));
   color: var(--p-accent, #C9962A);
   line-height: 1;
 }
 .p-timeline-desc {
   font-family: 'Oswald', sans-serif;
-  font-size: 9px;
+  font-size: calc(9px * var(--ps));
   font-weight: 400;
   color: var(--p-label, #888);
   letter-spacing: 1px;
@@ -527,23 +545,24 @@ html, body {
 /* Footer */
 .p-footer {
   background: linear-gradient(135deg, var(--p-header1, #1C1C1C), var(--p-header2, #2A2A2A), var(--p-header1, #1C1C1C));
-  border-top: 3px solid var(--p-border, #8B6914);
-  padding: 12px 50px;
+  border-top: calc(3px * var(--ps)) solid var(--p-border, #8B6914);
+  padding: calc(12px * var(--ps)) calc(50px * var(--ps));
   text-align: center;
+  flex-shrink: 0;
 }
 .p-tagline {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 24px;
-  letter-spacing: 5px;
+  font-size: calc(24px * var(--ps));
+  letter-spacing: calc(5px * var(--ps));
   color: var(--p-accent, #C9962A);
 }
 .p-sub-tagline {
   font-family: 'Crimson Pro', serif;
-  font-size: 11px;
+  font-size: calc(11px * var(--ps));
   font-style: italic;
   color: var(--p-label, #888);
-  margin-top: 2px;
-  letter-spacing: 2px;
+  margin-top: calc(2px * var(--ps));
+  letter-spacing: calc(2px * var(--ps));
 }
 
 /* Loading overlay */
@@ -603,6 +622,23 @@ html, body {
 
     <!-- VEHICLE TAB -->
     <div id="tab-vehicle" class="tab-content active">
+      <div class="section-label">Poster Size</div>
+      <div class="field-group">
+        <label>Aspect Ratio Preset</label>
+        <div id="ratio-presets" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;"></div>
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label>Width (inches)</label>
+          <input type="number" id="f-ratio-w" value="24" min="1" max="60" step="1" oninput="onRatioInput()" style="padding:9px 12px;width:100%;background:var(--input-bg);border:1px solid var(--input-border);border-radius:4px;color:var(--text-primary);font-family:Barlow,sans-serif;font-size:14px;">
+        </div>
+        <div class="field-group">
+          <label>Height (inches)</label>
+          <input type="number" id="f-ratio-h" value="36" min="1" max="60" step="1" oninput="onRatioInput()" style="padding:9px 12px;width:100%;background:var(--input-bg);border:1px solid var(--input-border);border-radius:4px;color:var(--text-primary);font-family:Barlow,sans-serif;font-size:14px;">
+        </div>
+      </div>
+      <p id="ratio-display" style="font-size:11px;color:var(--text-secondary);margin-top:-8px;margin-bottom:16px;"></p>
+
       <div class="section-label">Header Info</div>
       <div class="field-group">
         <label>Assembly Line (top badge)</label>
@@ -881,28 +917,135 @@ const THEMES = [
 let state = JSON.parse(JSON.stringify(GUMBY_DATA));
 
 // ═══════════════════════════════════════
+// ASPECT RATIO PRESETS
+// ═══════════════════════════════════════
+const RATIO_PRESETS = [
+  { label: '24×36', w: 24, h: 36 },
+  { label: '18×24', w: 18, h: 24 },
+  { label: '16×20', w: 16, h: 20 },
+  { label: '11×14', w: 11, h: 14 },
+  { label: '12×18', w: 12, h: 18 },
+  { label: '24×24', w: 24, h: 24 },
+  { label: '36×24', w: 36, h: 24 },
+  { label: 'Custom', w: null, h: null },
+];
+
+const POSTER_W = 800; // fixed render width, always
+const BASELINE_H = 1200; // --ps = 1 at this height
+
+function buildRatioPresets() {
+  const container = document.getElementById('ratio-presets');
+  container.innerHTML = '';
+  RATIO_PRESETS.forEach((r, i) => {
+    const btn = document.createElement('button');
+    btn.id = `ratio-btn-${i}`;
+    btn.textContent = r.label;
+    btn.style.cssText = `
+      font-family: Oswald, sans-serif; font-size: 11px; font-weight: 600;
+      letter-spacing: 1px; text-transform: uppercase; padding: 7px 4px;
+      background: var(--btn-secondary); border: 1px solid var(--panel-border);
+      border-radius: 4px; color: var(--text-secondary); cursor: pointer;
+      transition: all 0.2s;
+    `;
+    btn.onmouseover = () => { if (!btn.classList.contains('active-ratio')) btn.style.borderColor = 'var(--accent)'; };
+    btn.onmouseout  = () => { if (!btn.classList.contains('active-ratio')) btn.style.borderColor = 'var(--panel-border)'; };
+    if (r.w !== null) {
+      btn.onclick = () => applyRatioPreset(i);
+    } else {
+      btn.onclick = () => {
+        document.querySelectorAll('[id^=ratio-btn-]').forEach(b => {
+          b.classList.remove('active-ratio');
+          b.style.borderColor = 'var(--panel-border)';
+          b.style.color = 'var(--text-secondary)';
+        });
+        btn.classList.add('active-ratio');
+        btn.style.borderColor = 'var(--accent)';
+        btn.style.color = 'var(--accent)';
+      };
+    }
+    container.appendChild(btn);
+  });
+}
+
+function applyRatioPreset(i) {
+  const r = RATIO_PRESETS[i];
+  if (!r.w) return;
+  document.getElementById('f-ratio-w').value = r.w;
+  document.getElementById('f-ratio-h').value = r.h;
+  document.querySelectorAll('[id^=ratio-btn-]').forEach((b, j) => {
+    const active = j === i;
+    b.classList.toggle('active-ratio', active);
+    b.style.borderColor = active ? 'var(--accent)' : 'var(--panel-border)';
+    b.style.color = active ? 'var(--accent)' : 'var(--text-secondary)';
+  });
+  applyAspectRatio();
+}
+
+function onRatioInput() {
+  // deselect presets, select Custom
+  document.querySelectorAll('[id^=ratio-btn-]').forEach((b, j) => {
+    const isCustom = j === RATIO_PRESETS.length - 1;
+    b.classList.toggle('active-ratio', isCustom);
+    b.style.borderColor = isCustom ? 'var(--accent)' : 'var(--panel-border)';
+    b.style.color = isCustom ? 'var(--accent)' : 'var(--text-secondary)';
+  });
+  applyAspectRatio();
+}
+
+function applyAspectRatio() {
+  const w = parseFloat(document.getElementById('f-ratio-w').value) || 24;
+  const h = parseFloat(document.getElementById('f-ratio-h').value) || 36;
+  const ratio = h / w;
+  const posterH = Math.round(POSTER_W * ratio);
+  const ps = posterH / BASELINE_H;
+
+  const poster = document.getElementById('poster');
+  poster.style.height = posterH + 'px';
+  poster.style.setProperty('--ps', ps);
+
+  // Update display label
+  const gcd = (a,b) => b ? gcd(b, a%b) : a;
+  const g = gcd(w, h);
+  document.getElementById('ratio-display').textContent =
+    `${w}″ × ${h}″  ·  ${w/g}:${h/g} ratio  ·  poster renders at 800 × ${posterH}px`;
+
+  scalePreview();
+}
+
+// ═══════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════
 function init() {
   buildThemePresets();
+  buildRatioPresets();
   loadStateIntoFields();
   renderSpecsEditor();
   renderCowlEditor();
   renderStoryEditor();
   renderTimelineEditor();
   update();
-  scalePreview();
+  applyRatioPreset(0); // default 24x36
   window.addEventListener('resize', scalePreview);
 }
 
 function scalePreview() {
   const panel = document.getElementById('preview-panel');
   const wrapper = document.getElementById('scale-wrapper');
-  const posterW = 800;
-  const available = panel.clientWidth - 60;
-  const scale = Math.min(1, available / posterW);
+  const poster = document.getElementById('poster');
+  const posterW = POSTER_W;
+  const posterH = poster.offsetHeight || BASELINE_H;
+  const availW = panel.clientWidth - 60;
+  const availH = panel.clientHeight - 60;
+  const scaleByW = availW / posterW;
+  const scaleByH = availH / posterH;
+  const scale = Math.min(1, scaleByW, scaleByH);
   wrapper.style.transform = `scale(${scale})`;
-  wrapper.style.marginBottom = `-${(800 * (1 - scale))}px`;
+  wrapper.style.transformOrigin = 'top center';
+  // compensate collapsed height so panel scrolls correctly
+  const scaledH = posterH * scale;
+  wrapper.style.height = scaledH + 'px';
+  wrapper.style.width = (posterW * scale) + 'px';
+  wrapper.style.overflow = 'hidden';
 }
 
 // ═══════════════════════════════════════
@@ -1259,9 +1402,11 @@ async function downloadPoster() {
   // Temporarily reset scale for capture
   const wrapper = document.getElementById('scale-wrapper');
   const prevTransform = wrapper.style.transform;
-  const prevMargin = wrapper.style.marginBottom;
+  const prevH = wrapper.style.height;
+  const prevW = wrapper.style.width;
   wrapper.style.transform = 'scale(1)';
-  wrapper.style.marginBottom = '0';
+  wrapper.style.height = 'auto';
+  wrapper.style.width = 'auto';
 
   await new Promise(r => setTimeout(r, 200));
 
@@ -1276,8 +1421,10 @@ async function downloadPoster() {
     });
 
     const link = document.createElement('a');
+    const rw = document.getElementById('f-ratio-w').value || '24';
+    const rh = document.getElementById('f-ratio-h').value || '36';
     const name = (state.nickname || state.title || 'poster').replace(/\s+/g,'-').toLowerCase();
-    link.download = `${name}-poster.png`;
+    link.download = `${name}-${rw}x${rh}-poster.png`;
     link.href = canvas.toDataURL('image/png');
     link.click();
   } catch(e) {
@@ -1286,7 +1433,8 @@ async function downloadPoster() {
   }
 
   wrapper.style.transform = prevTransform;
-  wrapper.style.marginBottom = prevMargin;
+  wrapper.style.height = prevH;
+  wrapper.style.width = prevW;
   overlay.classList.remove('active');
   btn.disabled = false;
 }
