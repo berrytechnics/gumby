@@ -9,7 +9,7 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    background: #1a1a1a;
+    background: #C8C8B8;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -20,12 +20,12 @@
 
   .sign {
     width: 800px;
-    height: 1200px; /* exact 2:3 ratio for 24x36 poster */
-    background: #0d0d0d;
-    border: 3px solid #8B6914;
+    height: 1200px;
+    background: #F4F1E8;
+    border: 3px solid #2D5016;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 0 60px rgba(139, 105, 20, 0.3), 0 0 120px rgba(0,0,0,0.8);
+    box-shadow: 0 0 60px rgba(45, 80, 22, 0.2), 0 8px 40px rgba(0,0,0,0.25);
     display: flex;
     flex-direction: column;
   }
@@ -36,15 +36,15 @@
     position: absolute;
     width: 60px;
     height: 60px;
-    border-color: #C9962A;
+    border-color: #2D5016;
     border-style: solid;
     z-index: 10;
   }
   .sign::before { top: 8px; left: 8px; border-width: 3px 0 0 3px; }
   .sign::after { bottom: 8px; right: 8px; border-width: 0 3px 3px 0; }
 
-  .corner-br { position: absolute; top: 8px; right: 8px; width: 60px; height: 60px; border-top: 3px solid #C9962A; border-right: 3px solid #C9962A; z-index: 10; }
-  .corner-tl { position: absolute; bottom: 8px; left: 8px; width: 60px; height: 60px; border-bottom: 3px solid #C9962A; border-left: 3px solid #C9962A; z-index: 10; }
+  .corner-br { position: absolute; top: 8px; right: 8px; width: 60px; height: 60px; border-top: 3px solid #2D5016; border-right: 3px solid #2D5016; z-index: 10; }
+  .corner-tl { position: absolute; bottom: 8px; left: 8px; width: 60px; height: 60px; border-bottom: 3px solid #2D5016; border-left: 3px solid #2D5016; z-index: 10; }
 
   /* Background texture */
   .bg-texture {
@@ -54,17 +54,17 @@
       repeating-linear-gradient(
         0deg,
         transparent,
-        transparent 2px,
-        rgba(255,255,255,0.01) 2px,
-        rgba(255,255,255,0.01) 4px
+        transparent 3px,
+        rgba(0,0,0,0.012) 3px,
+        rgba(0,0,0,0.012) 6px
       );
     pointer-events: none;
   }
 
   /* Header band */
   .header {
-    background: linear-gradient(135deg, #1C1C1C 0%, #2A2A2A 50%, #1C1C1C 100%);
-    border-bottom: 2px solid #8B6914;
+    background: linear-gradient(135deg, #2D5016 0%, #3D6B20 50%, #2D5016 100%);
+    border-bottom: 3px solid #1A3009;
     padding: 28px 50px 20px;
     position: relative;
     text-align: center;
@@ -75,7 +75,7 @@
     font-family: 'Bebas Neue', sans-serif;
     font-size: 16px;
     letter-spacing: 8px;
-    color: #C9962A;
+    color: #D4E8B8;
     margin-bottom: 6px;
   }
 
@@ -85,14 +85,14 @@
     line-height: 0.9;
     color: #FFFFFF;
     letter-spacing: 4px;
-    text-shadow: 3px 3px 0px #8B6914, 6px 6px 20px rgba(139, 105, 20, 0.4);
+    text-shadow: 3px 3px 0px #1A3009, 6px 6px 20px rgba(0,0,0,0.3);
   }
 
   .subtitle {
     font-family: 'Oswald', sans-serif;
     font-size: 18px;
     font-weight: 400;
-    color: #C9962A;
+    color: #D4E8B8;
     letter-spacing: 6px;
     margin-top: 8px;
   }
@@ -105,27 +105,28 @@
     padding: 0 50px;
     margin: 0;
   }
-  .divider-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, #8B6914, transparent); }
+  .divider-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, #2D5016, transparent); }
   .divider-diamond {
     width: 8px;
     height: 8px;
-    background: #C9962A;
+    background: #2D5016;
     transform: rotate(45deg);
     flex-shrink: 0;
   }
 
   /* Origin banner */
   .origin-banner {
-    background: linear-gradient(90deg, #8B6914, #C9962A, #8B6914);
+    background: linear-gradient(90deg, #E8E4D8, #F4F1E8, #E8E4D8);
     padding: 10px 50px;
     text-align: center;
+    border-bottom: 2px solid #2D5016;
   }
   .origin-banner p {
     font-family: 'Oswald', sans-serif;
     font-size: 15px;
     font-weight: 600;
     letter-spacing: 4px;
-    color: #0d0d0d;
+    color: #2D5016;
     text-transform: uppercase;
   }
 
@@ -140,7 +141,7 @@
   }
 
   .col-divider {
-    background: linear-gradient(to bottom, transparent, #8B6914, transparent);
+    background: linear-gradient(to bottom, transparent, #2D5016, transparent);
     margin: 10px 0;
   }
 
@@ -152,11 +153,11 @@
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 5px;
-    color: #C9962A;
+    color: #2D5016;
     text-transform: uppercase;
     margin-bottom: 16px;
     padding-bottom: 8px;
-    border-bottom: 1px solid #333;
+    border-bottom: 2px solid #2D5016;
   }
 
   .spec-row {
@@ -164,13 +165,13 @@
     justify-content: space-between;
     align-items: baseline;
     padding: 7px 0;
-    border-bottom: 1px solid #1f1f1f;
+    border-bottom: 1px solid #DDD9CC;
   }
   .spec-label {
     font-family: 'Oswald', sans-serif;
     font-size: 12px;
     font-weight: 400;
-    color: #888;
+    color: #888878;
     letter-spacing: 1px;
     text-transform: uppercase;
   }
@@ -178,37 +179,38 @@
     font-family: 'Oswald', sans-serif;
     font-size: 13px;
     font-weight: 600;
-    color: #E8E8E8;
+    color: #1A1A0F;
     letter-spacing: 0.5px;
     text-align: right;
     max-width: 55%;
   }
-  .spec-value.gold { color: #C9962A; }
+  .spec-value.gold { color: #2D5016; }
 
   .story-text {
     font-family: 'Crimson Pro', serif;
     font-size: 15.5px;
     line-height: 1.75;
-    color: #CCCCCC;
+    color: #333328;
   }
 
   .story-text p { margin-bottom: 12px; }
   .story-text p:last-child { margin-bottom: 0; }
 
   .story-text strong {
-    color: #E8E8E8;
+    color: #1A1A0F;
     font-weight: 600;
   }
 
   .story-text em {
-    color: #C9962A;
+    color: #2D5016;
     font-style: italic;
   }
 
   /* Timeline section */
   .timeline-section {
-    padding: 20px 50px;
-    border-top: 1px solid #222;
+    padding: 16px 50px;
+    border-top: 2px solid #2D5016;
+    background: linear-gradient(to bottom, #EDE9DC, #F4F1E8);
   }
 
   .timeline-title {
@@ -216,9 +218,9 @@
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 5px;
-    color: #C9962A;
+    color: #2D5016;
     text-transform: uppercase;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     text-align: center;
   }
 
@@ -237,7 +239,7 @@
     left: 40px;
     right: 40px;
     height: 1px;
-    background: linear-gradient(to right, #8B6914, #C9962A, #8B6914);
+    background: linear-gradient(to right, #2D5016, #3D6B20, #2D5016);
   }
 
   .timeline-item {
@@ -252,10 +254,10 @@
   .timeline-dot {
     width: 20px;
     height: 20px;
-    background: #C9962A;
+    background: #2D5016;
     transform: rotate(45deg);
     flex-shrink: 0;
-    box-shadow: 0 0 10px rgba(201, 150, 42, 0.5);
+    box-shadow: 0 0 8px rgba(45, 80, 22, 0.4);
   }
 
   .timeline-content { text-align: center; }
@@ -263,7 +265,7 @@
   .timeline-year {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 22px;
-    color: #C9962A;
+    color: #2D5016;
     line-height: 1;
   }
 
@@ -271,7 +273,7 @@
     font-family: 'Oswald', sans-serif;
     font-size: 10px;
     font-weight: 400;
-    color: #888;
+    color: #888878;
     letter-spacing: 1px;
     text-transform: uppercase;
     margin-top: 3px;
@@ -280,8 +282,8 @@
 
   /* Footer */
   .footer {
-    background: linear-gradient(135deg, #1C1C1C, #2A2A2A, #1C1C1C);
-    border-top: 2px solid #8B6914;
+    background: linear-gradient(135deg, #2D5016, #3D6B20, #2D5016);
+    border-top: 3px solid #1A3009;
     padding: 18px 50px;
     text-align: center;
     position: relative;
@@ -291,15 +293,15 @@
     font-family: 'Bebas Neue', sans-serif;
     font-size: 32px;
     letter-spacing: 6px;
-    color: #C9962A;
-    text-shadow: 0 0 20px rgba(201, 150, 42, 0.3);
+    color: #FFFFFF;
+    text-shadow: 0 0 20px rgba(0,0,0,0.3);
   }
 
   .sub-tagline {
     font-family: 'Crimson Pro', serif;
     font-size: 13px;
     font-style: italic;
-    color: #666;
+    color: #D4E8B8;
     margin-top: 4px;
     letter-spacing: 2px;
   }
@@ -320,7 +322,7 @@
   <div class="header">
     <div class="year-badge">ASSEMBLED IN FLINT, MICHIGAN · 1970</div>
     <div class="main-title">CHEVROLET C10</div>
-    <div style="font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 12px; color: #C9962A; margin-top: 4px; text-shadow: 0 0 20px rgba(201,150,42,0.4);">" G U M B Y "</div>
+    <div style="font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 12px; color: #D4E8B8; margin-top: 4px; text-shadow: 0 0 20px rgba(0,0,0,0.3);">" G U M B Y "</div>
     <div class="subtitle">350 V8 · Long Bed · Three on the Tree</div>
   </div>
 
@@ -392,23 +394,23 @@
       <div class="col-title" style="margin-top: 18px;">Cowl Tag</div>
       <div class="spec-row">
         <span class="spec-label">Build Date</span>
-        <span class="spec-value" style="color:#444; font-style:italic;">——————</span>
+        <span class="spec-value" style="color:#BBBB99; font-style:italic;">——————</span>
       </div>
       <div class="spec-row">
         <span class="spec-label">Paint Code</span>
-        <span class="spec-value" style="color:#444; font-style:italic;">——————</span>
+        <span class="spec-value" style="color:#BBBB99; font-style:italic;">——————</span>
       </div>
       <div class="spec-row">
         <span class="spec-label">Trim Code</span>
-        <span class="spec-value" style="color:#444; font-style:italic;">——————</span>
+        <span class="spec-value" style="color:#BBBB99; font-style:italic;">——————</span>
       </div>
       <div class="spec-row">
         <span class="spec-label">Engine Code</span>
-        <span class="spec-value" style="color:#444; font-style:italic;">——————</span>
+        <span class="spec-value" style="color:#BBBB99; font-style:italic;">——————</span>
       </div>
       <div class="spec-row">
         <span class="spec-label">Axle Code</span>
-        <span class="spec-value" style="color:#444; font-style:italic;">——————</span>
+        <span class="spec-value" style="color:#BBBB99; font-style:italic;">——————</span>
       </div>
     </div>
 
