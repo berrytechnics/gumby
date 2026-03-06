@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1970 Chevrolet C10 — Show Sign</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+    font-family: 'Crimson Pro', serif;
+  }
+
+  .sign {
+    width: 900px;
+    background: #0d0d0d;
+    border: 3px solid #8B6914;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 60px rgba(139, 105, 20, 0.3), 0 0 120px rgba(0,0,0,0.8);
+  }
+
+  /* Corner ornaments */
+  .sign::before, .sign::after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-color: #C9962A;
+    border-style: solid;
+    z-index: 10;
+  }
+  .sign::before { top: 8px; left: 8px; border-width: 3px 0 0 3px; }
+  .sign::after { bottom: 8px; right: 8px; border-width: 0 3px 3px 0; }
+
+  .corner-br { position: absolute; top: 8px; right: 8px; width: 60px; height: 60px; border-top: 3px solid #C9962A; border-right: 3px solid #C9962A; z-index: 10; }
+  .corner-tl { position: absolute; bottom: 8px; left: 8px; width: 60px; height: 60px; border-bottom: 3px solid #C9962A; border-left: 3px solid #C9962A; z-index: 10; }
+
+  /* Background texture */
+  .bg-texture {
+    position: absolute;
+    inset: 0;
+    background: 
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(255,255,255,0.01) 2px,
+        rgba(255,255,255,0.01) 4px
+      );
+    pointer-events: none;
+  }
+
+  /* Header band */
+  .header {
+    background: linear-gradient(135deg, #1C1C1C 0%, #2A2A2A 50%, #1C1C1C 100%);
+    border-bottom: 2px solid #8B6914;
+    padding: 28px 50px 20px;
+    position: relative;
+    text-align: center;
+  }
+
+  .year-badge {
+    display: inline-block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 8px;
+    color: #C9962A;
+    margin-bottom: 6px;
+  }
+
+  .main-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 86px;
+    line-height: 0.9;
+    color: #FFFFFF;
+    letter-spacing: 4px;
+    text-shadow: 3px 3px 0px #8B6914, 6px 6px 20px rgba(139, 105, 20, 0.4);
+  }
+
+  .subtitle {
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: #C9962A;
+    letter-spacing: 6px;
+    margin-top: 8px;
+  }
+
+  /* Gold divider */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 50px;
+    margin: 0;
+  }
+  .divider-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, #8B6914, transparent); }
+  .divider-diamond {
+    width: 8px;
+    height: 8px;
+    background: #C9962A;
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+
+  /* Origin banner */
+  .origin-banner {
+    background: linear-gradient(90deg, #8B6914, #C9962A, #8B6914);
+    padding: 10px 50px;
+    text-align: center;
+  }
+  .origin-banner p {
+    font-family: 'Oswald', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    color: #0d0d0d;
+    text-transform: uppercase;
+  }
+
+  /* Content area */
+  .content {
+    padding: 30px 50px;
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    gap: 0;
+  }
+
+  .col-divider {
+    background: linear-gradient(to bottom, transparent, #8B6914, transparent);
+    margin: 10px 0;
+  }
+
+  .specs-col { padding-right: 30px; }
+  .story-col { padding-left: 30px; }
+
+  .col-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 5px;
+    color: #C9962A;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #333;
+  }
+
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 7px 0;
+    border-bottom: 1px solid #1f1f1f;
+  }
+  .spec-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #888;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .spec-value {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #E8E8E8;
+    letter-spacing: 0.5px;
+    text-align: right;
+    max-width: 55%;
+  }
+  .spec-value.gold { color: #C9962A; }
+
+  .story-text {
+    font-family: 'Crimson Pro', serif;
+    font-size: 15.5px;
+    line-height: 1.75;
+    color: #CCCCCC;
+  }
+
+  .story-text p { margin-bottom: 12px; }
+  .story-text p:last-child { margin-bottom: 0; }
+
+  .story-text strong {
+    color: #E8E8E8;
+    font-weight: 600;
+  }
+
+  .story-text em {
+    color: #C9962A;
+    font-style: italic;
+  }
+
+  /* Timeline section */
+  .timeline-section {
+    padding: 20px 50px;
+    border-top: 1px solid #222;
+  }
+
+  .timeline-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 5px;
+    color: #C9962A;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .timeline {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+    padding: 0 20px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 40px;
+    right: 40px;
+    height: 1px;
+    background: linear-gradient(to right, #8B6914, #C9962A, #8B6914);
+  }
+
+  .timeline-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    position: relative;
+  }
+
+  .timeline-dot {
+    width: 20px;
+    height: 20px;
+    background: #C9962A;
+    transform: rotate(45deg);
+    flex-shrink: 0;
+    box-shadow: 0 0 10px rgba(201, 150, 42, 0.5);
+  }
+
+  .timeline-content { text-align: center; }
+
+  .timeline-year {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: #C9962A;
+    line-height: 1;
+  }
+
+  .timeline-desc {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    color: #888;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 3px;
+    line-height: 1.4;
+  }
+
+  /* Footer */
+  .footer {
+    background: linear-gradient(135deg, #1C1C1C, #2A2A2A, #1C1C1C);
+    border-top: 2px solid #8B6914;
+    padding: 18px 50px;
+    text-align: center;
+    position: relative;
+  }
+
+  .tagline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 6px;
+    color: #C9962A;
+    text-shadow: 0 0 20px rgba(201, 150, 42, 0.3);
+  }
+
+  .sub-tagline {
+    font-family: 'Crimson Pro', serif;
+    font-size: 13px;
+    font-style: italic;
+    color: #666;
+    margin-top: 4px;
+    letter-spacing: 2px;
+  }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .sign { box-shadow: none; width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sign">
+  <div class="bg-texture"></div>
+  <div class="corner-br"></div>
+  <div class="corner-tl"></div>
+
+  <div class="header">
+    <div class="year-badge">ASSEMBLED IN FLINT, MICHIGAN · 1970</div>
+    <div class="main-title">CHEVROLET C10</div>
+    <div class="subtitle">350 V8 · Long Bed · Three on the Tree</div>
+  </div>
+
+  <div class="origin-banner">
+    <p>Sold New · Hoffpauier Chevrolet · Lampasas, Texas · Est. 1970</p>
+  </div>
+
+  <div class="content">
+    <div class="specs-col">
+      <div class="col-title">By The Numbers</div>
+
+      <div class="spec-row">
+        <span class="spec-label">Engine</span>
+        <span class="spec-value gold">350ci Small Block V8</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Carburetor</span>
+        <span class="spec-value">Edelbrock</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Transmission</span>
+        <span class="spec-value">Saginaw 3-Speed Manual</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Shift</span>
+        <span class="spec-value">Column — Three on the Tree</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Brakes</span>
+        <span class="spec-value">Manual Drum · All Four</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Steering</span>
+        <span class="spec-value">Manual</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Drive</span>
+        <span class="spec-value">2WD Conventional</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Bed</span>
+        <span class="spec-value">Long Bed · 8 ft</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">A/C</span>
+        <span class="spec-value gold">Factory Equipped</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Bumper</span>
+        <span class="spec-value gold">Ruffneck HD · Perry Co., Waco TX</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Gun Rack</span>
+        <span class="spec-value gold">Original · Still Installed</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Est. Mileage</span>
+        <span class="spec-value">~186,000</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Title</span>
+        <span class="spec-value gold">Clean · One Owner 41 Years</span>
+      </div>
+    </div>
+
+    <div class="col-divider"></div>
+
+    <div class="story-col">
+      <div class="col-title">The Story</div>
+      <div class="story-text">
+        <p>This truck rolled off the line in <strong>Flint, Michigan</strong> in 1970 — the last uninhibited year of American truck production before emissions regulations changed everything forever.</p>
+
+        <p>It was sold new at <em>Hoffpauier Chevrolet in Lampasas, Texas</em>, where the dealership installed a <strong>Ruffneck HD bumper</strong> — manufactured by Perry Co. in Waco — with the dealership's name <strong>cast permanently into the steel</strong>. That bumper is still on this truck today.</p>
+
+        <p>The configuration tells the story: long bed, factory air conditioning, heavy duty bumper, gun rack. This was a <strong>working ranch truck</strong>, ordered by a Hill Country rancher who needed a truck that could work as hard as he did.</p>
+
+        <p>It spent approximately <strong>forty years in Mississippi</strong> under a single long term owner — a non-salt state — which is largely why the frame is solid and the bones are strong after 55 years.</p>
+
+        <p>In 2026 it came home to <strong>Picayune, Mississippi</strong>, where it is being maintained and restored as a proud daily driver.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="timeline-section">
+    <div class="timeline-title">55 Years of American Road</div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">1970</div>
+          <div class="timeline-desc">Built in Flint<br>Sold in Lampasas, TX</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">1985</div>
+          <div class="timeline-desc">Mississippi<br>~86,000 Miles</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">2025</div>
+          <div class="timeline-desc">Surfaces in<br>Louisiana</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">2026</div>
+          <div class="timeline-desc">Home · Picayune<br>Mississippi</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="tagline">This Is Not A Restoration. This Is The Real Thing.</div>
+    <div class="sub-tagline">Built when America made things to last · Still proving it</div>
+  </div>
+
+</div>
+
+</body>
+</html>
